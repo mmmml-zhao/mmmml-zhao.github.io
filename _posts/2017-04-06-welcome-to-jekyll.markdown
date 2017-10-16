@@ -5,22 +5,13 @@ date: 2017-04-06 13:32:20 +0300
 description: You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. # Add post description (optional)
 img:  # Add image post (optional)
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+## 论逻辑对学习重要性
+&emsp;**很重要！！！ 结束**
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+## 最近学习了什么呢
+呀，学习了js写运动，对于运动要先分析步骤，通过一步步实现！
+通过视频呢学习封装了一个添加事件函数EventUtil(obj,type,fn)与运动函数start()里面使用了setInterval(fn,time)与clearInterval(obj),setInterval()是将第一个参数传来的函数按第二个参数的时间重复运行，将setInterval()赋予一个变量obj给clearInterval(obj),cleerInterval()可以清除setInterval()的定时重复触发效果。然后用jq写了一遍，意识到框架果然好用，然后jq里居然有这个类型的运动函数animate()。
+[练习](http://htmlpreview.github.io/?https://github.com/kawaiiz/html_css_JS-_Jq/blob/master/js%E5%AD%A6%E4%B9%A0/%E8%BF%90%E5%8A%A8/%E9%93%BE%E5%BC%8F%E8%BF%90%E5%8A%A8%E4%B8%8E%E5%90%8C%E6%97%B6%E8%BF%90%E5%8A%A8.html)
 
-Jekyll also offers powerful support for code snippets:
-
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+##今天的心情
+今天的心情很躁动，事情多、乱、杂。有些可能真是我小心眼了吧。今天的智商似乎降到了3岁，既然无法逃避，抱怨也没用，拜托积极面对，梳理脉络，一件一件来做。同样的结果，不抱怨，我会有个很好的学习过程，以及别人的好印象。龙儿加油哦~~~
