@@ -5,22 +5,14 @@ date: 2017-04-06 13:32:20 +0300
 description: You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. # Add post description (optional)
 img:  # Add image post (optional)
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve`, which launches a web server and auto-regenerates your site when a file is updated.
+## 最近学了什么呢
+&emsp;把用js写运动做了一个小总结（话是没有记笔记的好习惯），感觉基本的轮转已经不成问题了，关键就是判断好每一步的规律（数字多了 头晕晕），接下来就是canvas,代码画图，感觉这个的关键就是无止尽的调整坐标，估计还是没有深入接触的问题吧，拿下它，吼吼。
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
 
-Jekyll also offers powerful support for code snippets:
 
-{% highlight ruby %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
-
-Check out the [Jekyll docs][jekyll-docs] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll Talk][jekyll-talk].
-
-[jekyll-docs]: https://jekyllrb.com/docs/home
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-talk]: https://talk.jekyllrb.com/
+##我对自控力的需求 
+&emsp;自控力是面对自己的欲望与其作斗争的能力，可是我干嘛要和欲望作斗争，我爱吃、我爱聊天、我爱阳光、我爱出行虽然占用了学习时间，可是生活不全是学习呀，没办法了，既然欲望用去了时间，就让我调整生物钟更早的起来学习吧。 
+开始学canvas就立个小flag，给在考研的老同学做一个页面（原来给他做的手工，他觉得我应该发挥专业的长处 嗯，有道理），希望他能考上南师大，也算是带着我的意志，继续学习吧！  
+自从前天开始用了soul，很舒服的聊天，我也不去找别人，就这样，有人找我，我就聊，只要不给QQ、微信、微博、所在城市应该就可以认为我们完全不会再现现实的交集吧。  
+认识了一位同一届的妹子，哇  对胃口  有话题我感觉 日常的11点睡觉的flag完全不够用呢！希望能继续聊下去。怎么说呢，还是有可惜的地方的，我看到了一双眼睛，莫名的感觉看到了自己，我似乎也是用这种眼神告诉这周围，请不要靠近我，很想继续聊，也许是另一个和我一样不有趣的人吧，但是我知道拥有这样眼神的人，很难呀，果然的看到没有回我，高三党吧，最后一条是我发的，发完就把聊天记录删了，能不能继续聊下去就看她了。
+ps.配图就是那双摄人心魄的眼眸 
