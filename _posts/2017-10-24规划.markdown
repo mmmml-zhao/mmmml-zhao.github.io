@@ -1,10 +1,17 @@
----
+<!-- ---
 layout: post
 title: "时间规划 自控力"
 date: 2017-10-24 09:38:30 +0300
 description: 小阶段
 img: 很想去了解的眼神怕是不行.jpg
 tags: [js,soul]
+--- -->
+---
+layout: post
+title: "Welcome to Jekyll!"
+date: 2017-04-06 13:32:20 +0300
+description: You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. # Add post description (optional)
+img:  # Add image post (optional)
 ---
 ## 最近学了什么呢
 &emsp;把用js写运动做了一个小总结（话是没有记笔记的好习惯），感觉基本的轮转已经不成问题了，关键就是判断好每一步的规律（数字多了 头晕晕），接下来就是canvas,代码画图，感觉这个的关键就是无止尽的调整坐标，估计还是没有深入接触的问题吧，拿下它，吼吼。
