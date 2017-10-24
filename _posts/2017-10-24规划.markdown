@@ -1,12 +1,4 @@
-<!-- ---
-layout: post
-title: "时间规划 自控力"
-date: 2017-10-24 09:38:30 +0300
-description: 小阶段
-img: 很想去了解的眼神怕是不行.jpg
-tags: [js,soul]
---- -->
----
+
 layout: post
 title: "Welcome to Jekyll!"
 date: 2017-04-06 13:32:20 +0300
