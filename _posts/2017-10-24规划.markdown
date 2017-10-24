@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 时间规划 自控力
+title: "时间规划 自控力"
 date: 2017-10-24 09:38:30 +0300
 description: 小阶段
 img: 很想去了解的眼神怕是不行.jpg
