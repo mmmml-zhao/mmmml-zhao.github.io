@@ -35,7 +35,9 @@ canvas既然是画布，我们自然可以在上面作画，主要使用了`move
 
 既然是画，有静态图，也会有动态，我们可以使用 `setInterval()`函数来重复绘制画布，但是每一次绘制前一定要clearRect()清除画布上的内容。
 
-这是制作的贝塞尔曲线[bezierCurve](http://htmlpreview.github.io/?https://github.com/kawaiiz/task/blob/master/canvas/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF.html)
+这是制作的贝塞尔曲线
+
+    <a href="http://htmlpreview.github.io/?https://github.com/kawaiiz/task/blob/master/canvas/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF.html">bezierCurve</a>
 
 ##心情
 最近在用soul找到一个聊得来的人，继续。现实比网络重要，切记。心情呢，比前段日子要放松点，至少不眉头紧皱，不过呀 ，时间紧迫，我还能这么悠闲，真是传染呀。
