@@ -1,0 +1,42 @@
+---
+layout: post
+
+title: canvas 小结
+
+date: 2017-10-16 10:30:30 +0300
+
+description: 小阶段
+
+img: black.png
+
+tags: [js,jq]
+---
+
+## 最近学习了什么
+就最近学习的canvas做一个小结，我们可以用canvas标签在页面内创建一块画布，需要注意的在`style`中设置画布的宽高只是对画布的一个拉升或者缩放并不是真正的大小变化，下面这段代码是我理解最正确的设置代码，在做屏幕自适应时很方便。
+
+    var canvas = document.getElementById("canvas的id");//获取画布
+    var context = canvas.getContext("2d");//获取上下文
+    canvas.width = width;//画布宽度
+    canvas.height = height;//画布高度
+    
+
+canvas既然是画布，我们自然可以在上面作画，主要使用了`moveTo()`、`lineTo()`、`arc()`、`fillRect()`、`strokeRect()`、`bezierCurveTo()`、`quadraticCurveTo()`等等，个人觉得画一条线的步骤是
+    
+    context.beginPath();
+    context.strokeStyle = "   ";
+    context.moveTo(x,y);
+    context.lineTo(x1,y1);
+    context.stroke();
+
+如果是封闭图形可以加上closeRect(),使用fillStyle(),fill()来填充一块区域;
+
+这些线条可能无法方便的画出一些图形，所以又有一系列转换的方法`scale()`、`rotate()`、`translate()`、`transform()`、`setTransform()`分别是缩放、旋转，改变坐标轴原点、替换绘图当前的转换矩阵、重置转换矩阵，具体的参数说明W3C都有，就不详述。
+
+既然是画，有静态图，也会有动态，我们可以使用 `setInterval()`函数来重复绘制画布，但是每一次绘制前一定要clearRect()清除画布上的内容。
+
+这是制作的贝塞尔曲线[bezierCurve](https://github.com/kawaiiz/task/blob/master/canvas/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF.html)
+
+##心情
+最近在用soul找到一个聊得来的人，继续。现实比网络重要，切记。心情呢，比前段日子要放松点，至少不眉头紧皱，不过呀 ，时间紧迫，我还能这么悠闲，真是传染呀。
+
