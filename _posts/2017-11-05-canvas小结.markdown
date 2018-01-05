@@ -35,6 +35,12 @@ canvas既然是画布，我们自然可以在上面作画，主要使用了`move
 
 既然是画，有静态图，也会有动态，我们可以使用 `setInterval()`函数来重复绘制画布，但是每一次绘制前一定要clearRect()清除画布上的内容。
 
+而交互事件，获取x,y的坐标也有标准的公式
+
+    var x = event.clientX - canvas.getBoundingClientRect().left;
+    var y = event.clientY - canvas.getBoundingClientRect().top;
+    
+如鼠标点击画布上一个小圆从而使它改变颜色，我们可以将上面的坐标传入isPointInPath(x,y),如果这个坐标在路径内，则可以选择到这个路径，给他覆盖一个新的不同颜色的圆。
 这是制作的贝塞尔曲线[bezierCurve](http://htmlpreview.github.io/?https://github.com/kawaiiz/task/blob/master/canvas/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF/%E8%B4%9D%E5%A1%9E%E5%B0%94%E6%9B%B2%E7%BA%BF.html)
 
 ##心情
