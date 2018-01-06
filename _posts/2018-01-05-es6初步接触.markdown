@@ -47,6 +47,7 @@ tags: [js,jq]
     let [x = y, y = 1] = [];     // ReferenceError: y is not defined
 ```
 
+
 2. 对象的解构赋值 
 `let { foo, bar } = { foo: "aaa", bar: "bbb" };`
 对象的属性没有次序，变量必须与属性同名，才能取到正确的值。  
@@ -68,6 +69,7 @@ tags: [js,jq]
     first // 1
     last // 3
 ```
+
 4. 字符串也可以解构赋值  
 ```javascript
     const [a, b, c, d, e] = 'hello';
@@ -78,6 +80,7 @@ tags: [js,jq]
     e // "o"
 ```
 
+
 5. 函数的参数也可以使用解构赋值。
 ```javascript
     function add([x, y]){
@@ -85,7 +88,9 @@ tags: [js,jq]
     }
     add([1, 2]); // 3
 ```
-6. 解构赋值的规则是，只要等号右边的值不是对象或数组，就先将其转为对象。能不放`圆括号`就不放，会导致报错。
+
+
+6. 解构赋值的规则是，只要等号右边的值不是对象或数组，就先将其转为对象。能不放`圆括号`就不放，有很大可能会导致报错。
 ```javascript
     let [(a)] = [1];
     let {x: (c)} = {};
@@ -101,6 +106,8 @@ tags: [js,jq]
     ({ p: (d) } = {}); // 正确
     [(parseInt.prop)] = [3]; // 正确
 ```
+
+
 7. 解构赋值的一些用途
     1. 交换变量的值
     ```javascript
