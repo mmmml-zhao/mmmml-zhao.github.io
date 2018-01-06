@@ -9,7 +9,7 @@ description: 开始es6标准
 
 img: black.png
 
-tags: [js,jq]
+tags: [js,es6]
 ---
 
 ## `let`与`const`
