@@ -40,8 +40,7 @@ tags: [js,jq]
 `let [a,b] = [1,2,3]`不报错等于是第三位赋值而已  
 默认值`let [ x=1 ] = [undefined]` 只有当后面的空为undefined时默认值才生效。当默认值是一个表达式，则只有到用到的时候才会运算（惰性求值）。  
 默认值可以引用解构赋值的其他变量，但该变量必须已经声明。
-```JavaScript
-    
+```javascript
     let [x = 1, y = x] = [];     // x=1; y=1
     let [x = 1, y = x] = [2];    // x=2; y=2
     let [x = 1, y = x] = [1, 2]; // x=1; y=2
@@ -52,7 +51,7 @@ tags: [js,jq]
 `let { foo, bar } = { foo: "aaa", bar: "bbb" };`
 对象的属性没有次序，变量必须与属性同名，才能取到正确的值。  
 如果变量名与属性名不一致，必须写成下面这样。  
-```JavaScript
+```javascript
     let { foo: baz } = { foo: 'aaa', bar: 'bbb' };
     baz // "aaa"
 ```
@@ -62,14 +61,14 @@ tags: [js,jq]
 `let { log, sin, cos } = Math;` 
 将Math对象的对数、正弦、余弦三个方法，赋值到对应的变量上，使用就会方便很多。  
 3. 可以对数组进行对象属性的解构。
-```JavaScript
+```javascript
     let arr = [1, 2, 3];
     let {0 : first, [arr.length - 1] : last} = arr;
     first // 1
     last // 3
 ```
 4. 字符串也可以解构赋值  
-```JavaScript
+```javascript
     const [a, b, c, d, e] = 'hello';
     a // "h"
     b // "e"
@@ -79,7 +78,7 @@ tags: [js,jq]
 ```
 
 5.函数的参数也可以使用解构赋值。
-```JavaScript
+```javascript
     function add([x, y]){
       return x + y;
     }
@@ -87,7 +86,7 @@ tags: [js,jq]
     add([1, 2]); // 3
 ```
 5. 解构赋值的规则是，只要等号右边的值不是对象或数组，就先将其转为对象。能不放`圆括号`就不放，会导致报错。
-```JavaScript
+```javascript
     let [(a)] = [1];
     let {x: (c)} = {};
     let ({x: c}) = {};
@@ -97,20 +96,20 @@ tags: [js,jq]
     let { o: ({ p: p }) } = { o: { p: 2 } };
 ```
 只有赋值语句的非模块部分可用。
-```JavaScript
+```javascript
     [(b)] = [3]; // 正确
     ({ p: (d) } = {}); // 正确
     [(parseInt.prop)] = [3]; // 正确
 ```
 6. 解构赋值的一些用途
     1. 交换变量的值
-    ```JavaScript
+    ```javascript
         let x = 1;
         let y = 2;
         [x, y] = [y, x];
     ```
     2. 函数中取出多个值
-    ```JavaScript
+    ```javascript
         // 返回一个数组
 
         function example() {
@@ -129,7 +128,7 @@ tags: [js,jq]
         let { foo, bar } = example();
     ```
     3. 提取 JSON 数据
-    ```JavaScript
+    ```javascript
         let jsonData = {
           id: 42,
           status: "OK",
