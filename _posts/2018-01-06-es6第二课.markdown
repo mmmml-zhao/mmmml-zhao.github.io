@@ -52,6 +52,7 @@ $('#result').append(`
 
 以下是几个范例
 1. 模板字符串 vue的v-for可能原理就是这个
+
 ```javascript
 let template = `
 <ul>
