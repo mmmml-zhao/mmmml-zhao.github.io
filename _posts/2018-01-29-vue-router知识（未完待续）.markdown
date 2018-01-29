@@ -13,8 +13,10 @@ tags: [js,vue]
 ---
 
 vue-router
-1.  在index.js 顶部引入模板
-2. 在下面Vue,use(Router)注册插件
+1.  在index.js 顶部引入模板  
+
+2. 在下面Vue,use(Router)注册插件  
+
 3. 创建router实例，注册路由，格式如下
 ```javascript
   routes: [
@@ -38,16 +40,19 @@ vue-router
     },
   ]
 ```
+  
+
 4. 名词解释
-path: 路径   (‘/‘是指根路径）
+path: 路径   （‘/‘是指根路径）
 name: 路径名称 (通过路径传值)
 component:这个路由的模板
 childen:子路由
 redirect:默认打开的路径
+  
 
 5. 路由传参
-1.  使用`name`,在模板中使用`{{$route.name}}`，当一个路由有子路由，那么这个路由的name是无用的
-2. 使用<router-view v-bink:to=“{name:'xxx',params:{id:123}}”>点击跳转<router-view>
+    * 使用`name`,在模板中使用`{{$route.name}}`，当一个路由有子路由，那么这个路由的name是无用的
+    *  使用<router-view v-bink:to=“{name:'xxx',params:{id:123}}”>点击跳转<router-view>
 这里数据绑定`to`必须绑定一个json，在json外加个双引号，然后再子路由中使用`{{$route.params.id}}`,注意是`route`,
 
 6. 路由表的组件群
