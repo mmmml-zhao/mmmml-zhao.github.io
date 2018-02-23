@@ -61,7 +61,7 @@ redirect:默认打开的路径
 路由定义，该路由有三个组件，
 ```javascript
 {
-    path：’/‘，
+    path：'/'，
     components:{
         default:home,
         left:first,
@@ -72,6 +72,6 @@ redirect:默认打开的路径
 在展示这个路由的页面的路由出口分别给上定义路由时使用的组件名称（是components中左边的），然后展现时就是一一对应的展示出来，如下
 ```javascript
 <router-view>这是默认的，未取名的路由的出口</router-view>
-<router-view name=’left‘>这是left的出口</router-view>
+<router-view name='left'>这是left的出口</router-view>
 <router-view name='right'>这是right的出口</router-view>
 ```
