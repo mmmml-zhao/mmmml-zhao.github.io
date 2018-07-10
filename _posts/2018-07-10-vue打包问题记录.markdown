@@ -1,0 +1,16 @@
+---
+layout: post
+title: 春花秋月今时了
+date: 2018-7-10 11:15:30 +0300
+description: 梦里花落知多少
+img: black.png
+tags: [vue]
+---
+
+## vue 打包  静态资源问题
+1. 图片采用绝对路径后，打包后会找不到图片的地址，如果采用相对路径则不会，原因是打包后的文件夹static似乎不是根目录下的（虽然我觉得是根目录），图片路径会找不到，而且打包的时候绝对路径下的图片url不会被改动，而相对路径的则会根据打包而调整，在图片路径前不加 `.`  和  `/` 。
+2. tff字体文件无法找到，同样是因为打包问题，看可以发现，文件路径少了一个dist，所以要修改config里的index.js下build的配置，将build下的assetsPublicPath改为`/dist/`,这样就可以找到了，网上说改成`./`,这会导致路径多了一层`static/css/`可能是tff文件引入的方式是`static/fonts/ionicons.24712f6.ttf`是相对的路径，如果打包的时候还用相对，就错位了这样，可能。
+3. css样式错误，自己写在页面的样式比框架的样式优先级低，原因有`main.js` 里`import`模块的顺序，似乎是router引入时会加载一次页面css，再引入iview的css导致自己写的css会被覆盖，第二就是公共css的引入被iview覆盖，开始我是将公共css直接放到App.vue下的，app模块引入的早，所以可能就会比后来的iview css优先级低。
+
+    
+&emsp;总结结束

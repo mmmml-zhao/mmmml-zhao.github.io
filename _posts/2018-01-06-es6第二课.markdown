@@ -1,0 +1,136 @@
+---
+layout: post
+
+title: es6第二课 字符串的扩展
+
+date: 2018-01-06 17:51:30 +0300
+
+description: es6学习
+
+img: black.png
+
+tags: [js,es6]
+---
+## 字符串扩展
+1. ES6 为字符串添加了遍历器接口，使得字符串可以被`for...of`循环遍历。
+```javascript
+for (let codePoint of 'foo') {
+  console.log(codePoint)
+}
+// "f"
+// "o"
+// "o"
+```
+  
+  
+
+2. 元素的方法 不是object 方法
+`includes()`, `startsWith()`, `endsWith()`, `repeat()`,`padStart()`,`padEnd()`   
+includes(‘字符’)：返回布尔值，表示是否找到了参数字符串。  
+startsWith(‘字符’)：返回布尔值，表示参数字符串是否在原字符串的头部。  
+endsWith(‘字符’)：返回布尔值，表示参数字符串是否在原字符串的尾部。  
+repeat(n)返回一个新字符串，表示将原字符串重复n次。  
+padStart()用于头部补全  
+padEnd()用于尾部补全。例子如下  
+```javascript
+'1'.padStart(10, '0') // "0000000001"
+'12'.padStart(10, '0') // "0000000012"
+'123456'.padStart(10, '0') // "0000123456"
+```
+
+3. 模板字符串 
+```javascript
+$('#result').append(`
+  There are <b>${basket.count}</b> items
+   in your basket, <em>${basket.onSale}</em>
+  are on sale!
+`);
+```
+
+用反引号`` ` `` 标识。它可以当作普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量。所有的空格和缩进都会被保留在输出之中。模板字符串中嵌入变量，需要将变量名写在`${}`之中。大括号内部可以放入任意的JavaScript表达式，可以进行运算，以及引用对象属性，还能调用函数。
+
+
+以下是几个范例
+1. 模板字符串 vue的v-for可能原理就是这个
+
+```javascript
+let template = `
+<ul>
+  <% for(let i=0; i < data.supplies.length; i++) { %>
+    <li><%= data.supplies[i] %></li>
+  <% } %>
+</ul>
+`;
+  function compile(template){
+  const evalExpr = /<%=(.+?)%>/g;
+  const expr = /<%([\s\S]+?)%>/g;
+
+  template = template
+    .replace(evalExpr, '`); \n  echo( $1 ); \n  echo(`')
+    .replace(expr, '`); \n $1 \n  echo(`');
+
+  template = 'echo(`' + template + '`);';
+
+  let script =
+  `(function parse(data){
+    let output = "";
+
+    function echo(html){
+      output += html;
+    }
+
+    ${ template }
+
+    return output;
+  })`;
+console.log(script);
+  return script;
+}
+
+let parse = eval(compile(template));
+document.getElementById('container').innerHTML = parse({ supplies: [ "broom", "mop", "cleaner" ] });
+
+```
+
+输出
+*broom
+*mop
+*cleaner
+
+2. 标签模板  
+函数名后不加(),而是``,关于非变量都纳入aaa，变量分别添加，排列顺序 `${total}`是为了将`The total is`与 `(` 分开，似乎无实际的要求
+
+```javascript
+let total = 30;
+let msg = passthru`The total is ${total} (${total*1.05} with tax)`;
+function passthru(aaa,vul,) {
+  let result = '';
+  let i = 0;
+  console.log(aaa);
+  while (i < aaa.length) {
+    result += aaa[i++];
+    console.log(result);
+    if (i < arguments.length) {
+      result += arguments[i];
+      console.log(result);
+    }
+  }
+  return result;
+}
+```
+打印的结果
+```javascript
+// ["The total is ", " (", " with tax)", raw: Array(3)]
+// es6_2.html:76 The total is 
+// es6_2.html:79 The total is 30
+// es6_2.html:76 The total is 30 (
+// es6_2.html:79 The total is 30 (31.5
+// es6_2.html:76 The total is 30 (31.5 with tax)
+```
+
+
+
+
+
+
+

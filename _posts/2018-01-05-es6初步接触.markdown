@@ -1,0 +1,145 @@
+---
+layout: post
+
+title: es6初步 let与const 解构赋值
+
+date: 2018-01-05 23:19:30 +0300
+
+description: 开始es6标准
+
+img: black.png
+
+tags: [js,es6]
+---
+
+## `let`与`const`
+`let`：定义块级作用域，使用let定义的变量，在其前面调用会报错，在`for`循环中使用let定义计数在循环外无法访问到，（for循环中式子是父域，{}是子域）。在父子域定义同样的变量，子域定义前调用变量，报错，像子域清除父域同名变量但自己不会提升。  
+
+注意暂时性死区
+```javascript
+  if (true) {
+      // TDZ开始
+    tmp = 'abc'; // ReferenceError
+    console.log(tmp); // ReferenceError
+    let tmp; // TDZ结束
+    console.log(tmp); // undefined
+    tmp = 123;
+    console.log(tmp); // 123
+    }
+```
+在let命令声明变量tmp之前，都属于变量tmp的“死区”。  
+`let`不允许在相同作用域内，重复声明同一个变量  
+
+`const`:声明一个只读的常量，const实际上保证变量指向的内存地址不得改动。对于简单类型的数据，值就保存在变量指向的那个内存地址。对于复合类型的数据（主要是对象和数组），变量保存的只是一个指针，const只能保证这个指针是固定的，至于它指向的数据结构是不是可变的，就完全不能控制了。所以给对象添加属性，计算长度什么的是可以的，但是赋予一个新值实际是改变const变量保存的指针或者内存地址是报错。如果连属性也冻结，使用`object.freeze()`方法.。  
+在全局中定义的let/const变量使用window[变量名]是无法访问到的。
+
+
+## 解构赋值
+1. 数组解构赋值：`let [a,b,c] = [1,2,3]` 等号两边格式类似（模式匹配），等于是给数组第一位的变量a赋予1。  
+`let [a,b] = [1];`  报错  
+`let [a,b] = [1,2,3]`不报错等于是第三位赋值而已  
+默认值`let [ x=1 ] = [undefined]` 只有当后面的空为undefined时默认值才生效。当默认值是一个表达式，则只有到用到的时候才会运算（惰性求值）。  
+默认值可以引用解构赋值的其他变量，但该变量必须已经声明。
+```javascript
+    let [x = 1, y = x] = [];     // x=1; y=1
+    let [x = 1, y = x] = [2];    // x=2; y=2
+    let [x = 1, y = x] = [1, 2]; // x=1; y=2
+    let [x = y, y = 1] = [];     // ReferenceError: y is not defined
+```
+
+
+2. 对象的解构赋值 
+`let { foo, bar } = { foo: "aaa", bar: "bbb" };`
+对象的属性没有次序，变量必须与属性同名，才能取到正确的值。  
+如果变量名与属性名不一致，必须写成下面这样。  
+```javascript
+    let { foo: baz } = { foo: 'aaa', bar: 'bbb' };
+    baz // "aaa"
+```
+对象的解构赋值的内部机制，是先找到同名属性，然后再赋给对应的变量。真正被赋值的是后者，而不是前者。
+对象的默认值`var {x = 3} = {x: undefined};`
+对象的解构赋值，可以很方便地将现有对象的方法，赋值到某个变量。  
+`let { log, sin, cos } = Math;` 
+将Math对象的对数、正弦、余弦三个方法，赋值到对应的变量上，使用就会方便很多。  
+
+3. 可以对数组进行对象属性的解构。
+```javascript
+    let arr = [1, 2, 3];
+    let {0 : first, [arr.length - 1] : last} = arr;
+    first // 1
+    last // 3
+```
+
+4. 字符串也可以解构赋值  
+```javascript
+    const [a, b, c, d, e] = 'hello';
+    a // "h"
+    b // "e"
+    c // "l"
+    d // "l"
+    e // "o"
+```
+
+
+5. 函数的参数也可以使用解构赋值。
+```javascript
+    function add([x, y]){
+      return x + y;
+    }
+    add([1, 2]); // 3
+```
+
+
+6. 解构赋值的规则是，只要等号右边的值不是对象或数组，就先将其转为对象。能不放`圆括号`就不放，有很大可能会导致报错。
+```javascript
+    let [(a)] = [1];
+    let {x: (c)} = {};
+    let ({x: c}) = {};
+    let {(x: c)} = {};
+    let {(x): c} = {};
+    function f([z,(x)]) { return x; }
+    let { o: ({ p: p }) } = { o: { p: 2 } };
+```
+只有赋值语句的非模块部分可用。
+```javascript
+    [(b)] = [3]; // 正确
+    ({ p: (d) } = {}); // 正确
+    [(parseInt.prop)] = [3]; // 正确
+```
+
+
+7. 解构赋值的一些用途
+    1. 交换变量的值
+    ```javascript
+        let x = 1;
+        let y = 2;
+        [x, y] = [y, x];
+    ```
+    2. 函数中取出多个值
+    ```javascript
+        // 返回一个数组
+
+        function example() {
+            return [1, 2, 3];
+        }
+        let [a, b, c] = example();
+        //返回值分别赋予a,b,c
+        // 返回一个对象
+
+        function example() {
+            return {
+                foo: 1,
+                bar: 2
+            };
+        }
+        let { foo, bar } = example();
+    ```
+    3. 提取 JSON 数据
+    ```javascript
+        let jsonData = {
+          id: 42,
+          status: "OK",
+          data: [867, 5309]
+        };
+        let { id, status, data: number } = jsonData;
+     ```
