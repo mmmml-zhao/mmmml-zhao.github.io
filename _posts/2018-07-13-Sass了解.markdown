@@ -1,0 +1,203 @@
+---
+layout: post
+title: Sass小结
+date: 2018-07-13 13:57:30 +0300
+description: 对今天看Sass的小结
+img: black.jpg 
+tags: [Sass]
+---
+
+## Sass的一些知识点
+
+-  1.嵌套  
+  - 1.1基本说明
+  使用Sass，在编写css样式时采用类似dom的树形结构的方式，一层一层的包裹，在查阅时会容易找到相应的节点。并且介绍了编写的代码。如：  
+
+    ```
+    #main p {
+      color: #00ff00;
+      width: 97%;
+      .redbox {
+        background-color: #ff0000;
+        color: #000000;
+      }
+    }
+    //编译为
+    #main p {
+      color: #00ff00;
+      width: 97%; }
+      #main p .redbox {
+        background-color: #ff0000;
+        color: #000000; }
+    ```
+  - 1.2父选择器
+  当需要为父元素添加hover属性时，不需要再独自的写一个块，使用父选择器`&`。写法如下：  
+    ```
+    a {
+      font-weight: bold;
+      &:hover { text-decoration: underline; }
+      body.firefox & { font-weight: normal; }
+    }
+    编译为
+    a {
+      font-weight: bold;}
+      a:hover {
+        text-decoration: underline; }
+        body.firefox a {
+          font-weight: normal; }
+    ```
+  其中`&`符就充当了父元素。
+  还有属性嵌套，就类似与对象，就不详述了。  
+  
+- 2.变量  
+  - 2.1基本说明
+  这里的变量和javascript中类似，具有块状作用域（注意key与value之间是`:`）。value的值可以是数字，字符串，颜色，布尔值，空值，数组（几乎只要是css中的属性值都可以用变量替代），在css中，运用变量可以统一管理一些值，比如色彩，常用文字的字号，只需要改动变量，引用处都会改动。  
+
+    ```
+    $width: 5em;
+    #main {
+      width: $width;
+    }
+    //编译为
+    #main {
+      width: 5em;
+    }
+    ```
+  
+  - 2.2插值语句 `#{}`
+  通过 #{} 插值语句可以在选择器或属性名中使用变量。如：
+  ```
+  $name: foo;
+  $attr: border;
+  p.#{$name} {
+    #{$attr}-color: blue;
+  }
+  ```
+  
+- 3.注释
+  - 3.1基本说明
+  注释有两种，第一种`/*这是注释*/`。该种格式是传统的css注释，当在Sass里写这种注释，编译成css时注释也会被带上。第二种是`//`，这种注释编译时会被删除了。  
+  
+- 4.运算
+  - 4.1基本说明
+  所有数据类型均支持相等运算 `==`或 `!=`。  
+
+  - 4.2加减运算  
+  数字类型的可以加减运算，如
+  ```
+  p {
+    width: 1in + 8pt;
+  }
+  //编译为
+  p {
+    width: 1.111in; 
+  }
+  ```
+
+  - 4.3除法运算
+  `/` 在 CSS 中通常起到分隔数字的用途,
+  以下三种情况 / 将被视为除法运算符号：  
+      - 如果值，或值的一部分，是变量或者函数的返回值  
+      - 如果值被圆括号包裹  
+      - 如果值是算数表达式的一部分  
+  ```
+  p {
+    font: 10px/8px;
+    $width: 1000px;
+    width: $width/2;
+    width: round(1.5)/2;
+    height: (500px/2); 
+    margin-left: 5px + 8px/2px;
+  }
+  //编译为
+  p {
+    font: 10px/8px;
+    width: 500px;
+    height: 250px;
+    margin-left: 9px; 
+  }
+  ```
+  如果需要使用变量，同时又要确保 / 不做除法运算而是完整地编译到 CSS 文件中，只需要用 #{} 插值语句将变量包裹。  
+  ```
+  p {
+    $font-size: 12px;
+    $line-height: 30px;
+    font: #{$font-size}/#{$line-height};
+  }
+  //编译为
+  p {
+    font: 12px/30px; 
+  }
+  ```
+
+- 5.@import 引入
+  - 5.1基础说明  
+  大多数情况下，一般在文件的最外层（不在嵌套规则内）使用 @import，其实，也可以将 @import 嵌套进 CSS 样式或者 @media 中，与平时的用法效果相同，只是这样导入的样式只能出现在嵌套的层中。
+  ```
+  //假设 example.scss 文件包含以下样式：
+  .example {
+    color: red;
+  }
+  //然后导入到 #main 样式内
+  .main {
+    @import "example";
+  }
+
+  //将会被编译为
+  .main .example {
+    color: red;
+  }
+  ```
+  - 5.2编译部分文件  
+  当通过`@import`把`sass`样式分散到多个文件时，你通常只想生成少数几个`css`文件。那些专门为`@import`命令而编写的`sass`文件，并不需要生成对应的独立`css`文件，这样的`sass`文件称为局部文件。对此，`sass`有一个特殊的约定来命名这些文件。此约定即，`sass`局部文件的文件名以下划线开头。这样，`sass`就不会在编译时单独编译这个文件输出`css`，而只把这个文件用作导入。当你`@import`一个局部文件时，还可以不写文件的全名，即省略文件名开头的下划线。举例来说，你想导入`themes/_night-sky.scss`这个局部文件里的变量，你只需在样式表中写`@import "themes/night-sky"`;   
+
+  - 5.3引入文件的修改  默认变量值
+  当局部文件被多个文件引用，但它们可能对局部文件中的某一个属性需要修改一下，这时就需要一个默认值。使用sass的!default标签可以实现这个目的。它很像css属性中!important标签的对立面，不同的是!default用于变量，含义是：如果这个变量被声明赋值了，那就用它声明的值，否则就用这个默认值。
+  ```
+  $fancybox-width: 400px !default;
+  .fancybox {
+    width: $fancybox-width;
+  }
+  ```
+
+- 6.混合器
+  - 6.1基本介绍
+  使用在经常有一段代码被复用的情况，比如居中
+  ```
+  @mixin tag-center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    -ms-transform: translate(-50%,-50%);
+    -o-transform: translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+  }
+  ```
+  当需要复用这段代码，就使用混合器。  
+
+  - 6.2带参混合器  
+  当我需要一个居右的垂直居中的定位，这时候我使用绝tag-center就不合适了，这时可以将tag-center改成带参，
+  ```
+    @mixin tag-center($top,$left,$x,$y){
+    position:absolute;
+    top:$top;
+    left:$left;
+    -webkit-transform: translate($x,$y);
+    -moz-transform: translate($x,$y);
+    -ms-transform: translate($x,$y);
+    -o-transform: translate($x,$y);
+    transform: translate($x,$y);
+  }
+  ```
+  在引用时给它传入参数。
+  实质上就是复制这个代码到想要的地方。
+
+- 7.@extend 继承  
+  - 7.1基础介绍  
+  变量和混合器不同，继承不是仅仅用css样式替换@extend处的代码。  
+  跟混合器相比，继承生成的css代码相对更少。因为继承仅仅是重复选择器，而不会重复属性，所以使用继承往往比混合器生成的css体积更小。继承只会在生成css时复制选择器，而不会复制大段的css属性。但是如果你不小心，可能会让生成的css中包含大量的选择器复制。最好让继承的元素不是层级的`.bip .baz `不行。
+ 
+
+&emsp;一日过，一日想，一日虚度,迷于往昔之闲适，人不强也，虽有春花秋月迷人眼，具往兮。年轻人可无远志，但应抱学习之心，学修身养性、学行为处事，假以时日，自当成才。严于己而后勤于生，诫己。
