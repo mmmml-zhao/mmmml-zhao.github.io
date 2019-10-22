@@ -1,20 +1,15 @@
-title: my blog
+title: 照明胧
 description: > # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  这是用于记录日常一些笔记的blog，废弃了一年多，要重新启动了。内容有关js,vue,react,ts,node,koa2。如果你进入了这里，希望能对你有帮助
 permalink: ':title/'
-baseurl: "/kawaiiz.github.io" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/" # the subpath of your site, e.g. /blog
+url: "kawaiiz.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Author Settings
 author: kawaiiz # add your name
-author-img: flower.jpg # add your photo
-about-author:    困难磨着你的性子  克服它 得到升华  屈服它 现实与理想间挣扎 # add description
-twitter: # add your Twitter handle
-facebook: # add your Facebook handle
+author-img: avatar.jpg # add your photo
+about-author: 照明胧的个人blog # add description
 github: kawaiiz # add your Github handle
-linkedin: # add your Linkedin handle
 email: 690902636@qq.com # add your Email address
 
 # Disqus
