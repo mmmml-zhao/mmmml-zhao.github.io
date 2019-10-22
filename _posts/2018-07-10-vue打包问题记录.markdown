@@ -2,8 +2,7 @@
 layout: post
 title: vue打包问题记录
 date: 2018-7-10 11:15:30 +0300
-description: 梦里花落知多少
-img: black.png
+description: 
 tags: [vue]
 ---
 

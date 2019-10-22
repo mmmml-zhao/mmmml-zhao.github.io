@@ -1,14 +1,8 @@
 ---
 layout: post
-
 title: vue组件学习
-
 date: 2018-01-06 17:51:30 +0300
-
 description: vue学习
-
-img: black.png
-
 tags: [vue]
 ---
 

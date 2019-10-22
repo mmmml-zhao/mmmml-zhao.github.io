@@ -1,15 +1,8 @@
-
 ---
 layout: post
-
 title: 宜兴工作小结
-
 date: 2018-01-14 22:00:30 +0300
-
 description: 宜兴项目的小结
-
-img: black.png
-
 tags: [js,html,work]
 ---
 

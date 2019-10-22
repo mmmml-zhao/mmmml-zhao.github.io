@@ -1,14 +1,8 @@
 ---
 layout: post
-
 title: es6初步 let与const 解构赋值
-
 date: 2018-01-05 23:19:30 +0300
-
 description: 开始es6标准
-
-img: black.png
-
 tags: [js,es6]
 ---
 
