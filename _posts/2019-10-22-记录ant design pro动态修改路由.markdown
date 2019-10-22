@@ -1,7 +1,7 @@
 ---
 layout: main
 title: ant design pro 动态修改路由
-date: 2017-10-10 09:50:30 +0300
+date: 2019-10-10 17:50:30 +0300
 description: 公共cms使用ant design pro框架，需要使用动态注入路由
 img: 2019-10-22/antd.svg 
 tags: [react,ts,ant design pro,umi]
