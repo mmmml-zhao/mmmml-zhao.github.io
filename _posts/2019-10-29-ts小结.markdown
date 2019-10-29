@@ -39,7 +39,7 @@ tags: [ts,typescript]
   描述属性：
     * 可选属性：标志`?`。好处之一是可以对可能存在的属性进行预定义，好处之二是可以捕获引用了不存在的属性时的错误。
     * 只读属性：标志`readonly`。对象属性只能在对象刚刚创建的时候修改其值。
-    * 额外的属性检查
+    * 额外的属性检查  
     ```
     interface IsInterface {
       attr:any,
@@ -48,7 +48,7 @@ tags: [ts,typescript]
       [propName: string]: any;
     }
     ```
-    * 函数类型：可以表示函数的参数类型，返回值类型
+    * 函数类型：可以表示函数的参数类型，返回值类型  
     ```
     interface IsFunc {
       (args1: string, args2: string): boolean;
@@ -59,7 +59,7 @@ tags: [ts,typescript]
       return `${args1} ${args2}`
     }
     ```
-    * 类类型：
+    * 类类型：  
     ```
     interface ClockInterface {
       currentTime: Date;
@@ -70,7 +70,7 @@ tags: [ts,typescript]
         constructor(h: number, m: number) { }
     }
     ```
-    * 混合类型：Js其动态灵活的特点，一个对象可以同时具有上面提到的多种类型
+    * 混合类型：Js其动态灵活的特点，一个对象可以同时具有上面提到的多种类型。    
     ```
     interface Counter {
       (start: number): string;
@@ -93,17 +93,17 @@ tags: [ts,typescript]
 
 3. 高级类型
     
-    * 交叉类型：多种类型叠加到一起成为一种类型（并集）。
+    * 交叉类型：多种类型叠加到一起成为一种类型（并集）。  
     ```
     type X =  A&B&C
     let a : X
     ```
-    * 联合类型：多种类型中的一种（或）。
+    * 联合类型：多种类型中的一种（或）。  
     ```
     type X = A|B
     let a : X
     ```
-    * 字符串字面量类型：效果类似枚举类型字符串
+    * 字符串字面量类型：效果类似枚举类型字符串。  
     ```
     type X = "1"|"2"|"3"; 
     let a : X
@@ -111,12 +111,12 @@ tags: [ts,typescript]
 
 4. 基本语法
     * 变量声明：变量的定义使用`let`,常量的定义使用`const`。
-    * 类型注解：Ts的类型注解是一种轻量级的为函数或变量添加约束的方式，通过给变量添加类型进行约束。
+    * 类型注解：Ts的类型注解是一种轻量级的为函数或变量添加约束的方式，通过给变量添加类型进行约束。  
     ```
       let str:string = '123'
       let num:number = 123
     ```
-    * 类型判断：
+    * 类型判断：  
     ```
     let a : string | number
     a = 请求的数据
@@ -143,5 +143,5 @@ tags: [ts,typescript]
     //instanceof的右侧要求是一个构造函数，TypeScript将细化为：
     //此构造函数的 prototype属性的类型，如果它的类型不为 any的话
     //构造签名所返回的类型的联合
-    if(a instanceof string) console.log(a.length)
+    if(a instanceof string) console.log(a.length)  
     ```
