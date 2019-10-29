@@ -1,0 +1,9 @@
+---
+layout: post
+title: ts小结
+date: 2019-10-29 09:05:30 +0300
+description: 对ts知识的小结。
+img: 2019-10-29/ts.png 
+tags: [ts,typescript]
+---
+

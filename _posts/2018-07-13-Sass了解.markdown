@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: main
 title: Sass小结
 date: 2018-07-13 13:57:30 +0300
 description: 对今天看Sass的小结

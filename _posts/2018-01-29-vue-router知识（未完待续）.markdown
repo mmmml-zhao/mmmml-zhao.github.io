@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: main
 title: vue-router(未完待续)
 date: 2018-01-29 19:27:30 +0300
 description: vue-router知识
