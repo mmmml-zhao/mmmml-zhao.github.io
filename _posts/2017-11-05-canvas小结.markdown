@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: main
 title: canvas 小结
 date: 2017-11-05 22:30:30 +0300
 description: 小阶段

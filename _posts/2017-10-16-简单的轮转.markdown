@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: main
 title: 逻辑 掌握逻辑
 date: 2017-10-16 10:30:30 +0300
 description: 小阶段

@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: main
 title: es6第二课 字符串的扩展
 date: 2018-01-06 17:51:30 +0300
 description: es6学习
