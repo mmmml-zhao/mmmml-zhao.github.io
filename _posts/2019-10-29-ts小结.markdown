@@ -56,7 +56,7 @@ tags: [ts,typescript]
 
     let isfunc:IsFunc
     isfunc = function(args1:string,args2:string):boolean{
-      return `${args1} ${args2}`
+      return args1+args2
     }
     ```
     * 类类型：
