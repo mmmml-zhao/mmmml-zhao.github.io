@@ -1,9 +1,147 @@
 ---
 layout: post
-title: ts小结
+title: Typescript
 date: 2019-10-29 09:05:30 +0300
 description: 对ts知识的小结。
 img: 2019-10-29/ts.png 
 tags: [ts,typescript]
 ---
+***以下TypeScript简称 Ts ，JavaScript简称 Js***  
 
+# Ts的基本认识
+1. 广义  
+    * Ts 由微软开发的自由和开源的编程语言。
+    * Ts 是 Js 的超集，扩展了 Js 的语法，支持 ECMAScript 6 标准。因此现有的 Js 代码可 与 Ts 一起工作无需任何修改，Ts 通过类型注解提供编译时的静态类型检查。
+    * Ts 设计目标是开发大型应用，它可以编译成纯 Js ，编译出来的 Js 可以运行在任何浏览器上。  
+2. 个人之见
+    * Ts 是对弱类型语言 Js 的一个约束语法，写 Ts 就像是写添加了新的语法的 Js 。
+    * 使用Ts有助于编写代码时的排错。
+    * 搭配 VS Code 真香。
+
+# Ts的基本知识点
+  
+1. 基本类型
+    
+    * boolean : 布尔值
+    * number : 数字
+    * string : 字符串
+    * T[]/Array<T> : 数组（T指数组内元素的类型）
+    * [T1,T2] : 元组 
+    * enum : 枚举
+    * any : 任意类型
+    * void : 无类型
+    * null与undefined : 空值与未定义
+    * never : 永不存在的值
+    * object : 对象
+
+2. 接口  
+  对值所具有的结构进行类型检查，对于结构里的属性也具有描述符属性
+  描述属性：
+    * 可选属性：标志`?`。好处之一是可以对可能存在的属性进行预定义，好处之二是可以捕获引用了不存在的属性时的错误。
+    * 只读属性：标志`readonly`。对象属性只能在对象刚刚创建的时候修改其值。
+    * 额外的属性检查
+    ```
+    interface IsInterface {
+      attr:any,
+      attr1?:any,
+      readonly attr2 :any,
+      [propName: string]: any;
+    }
+    ```
+    * 函数类型：可以表示函数的参数类型，返回值类型
+    ```
+    interface IsFunc {
+      (args1: string, args2: string): boolean;
+    }
+
+    let isfunc:IsFunc
+    isfunc = function(args1:string,args2:string):boolean{
+      return `${args1} ${args2}`
+    }
+    ```
+    * 类类型：
+    ```
+    interface ClockInterface {
+      currentTime: Date;
+    }
+
+    class Clock implements ClockInterface {
+        currentTime: Date;
+        constructor(h: number, m: number) { }
+    }
+    ```
+    * 混合类型：Js其动态灵活的特点，一个对象可以同时具有上面提到的多种类型
+    ```
+    interface Counter {
+      (start: number): string;
+      interval: number;
+      reset(): void;
+    }
+
+    function getCounter(): Counter {
+      let counter = <Counter>function (start: number) { };
+      counter.interval = 123;
+      counter.reset = function () { };
+      return counter;
+    }
+
+    let c = getCounter();
+    c(10);
+    c.reset();
+    c.interval = 5.0;
+    ```
+
+3. 高级类型
+    
+    * 交叉类型：多种类型叠加到一起成为一种类型（并集）。
+    ```
+    type X =  A&B&C
+    let a : X
+    ```
+    * 联合类型：多种类型中的一种（或）。
+    ```
+    type X = A|B
+    let a : X
+    ```
+    * 字符串字面量类型：效果类似枚举类型字符串
+    ```
+    type X = "1"|"2"|"3"; 
+    let a : X
+    ```
+
+4. 基本语法
+    * 变量声明：变量的定义使用`let`,常量的定义使用`const`。
+    * 类型注解：Ts的类型注解是一种轻量级的为函数或变量添加约束的方式，通过给变量添加类型进行约束。
+    ```
+      let str:string = '123'
+      let num:number = 123
+    ```
+    * 类型判断：
+    ```
+    let a : string | number
+    a = 请求的数据
+    // 请求的数据类型定义接口的时候会知道
+
+    //假设string类型 已知的打印长度的方法有五种
+
+    // as 类型断言 推荐使用
+    console.log((a as string).length)
+
+    // <类型> 类型断言 jsx中不支持
+    console.log((<string>a).length)
+
+    // 类型保护机制：通过定义函数 
+    function isString (a:string | number): a is string{
+      return typeof a === 'string'
+    }
+    if(isString(a)) console.log(a.length)
+
+    // typeof类型保护：当if的条件是typeof 指明变量类型时 ，块状区域内变量的类型被指定
+    if(typeof a === 'string') console.log(a.length)
+
+    // instanceof类型保护：判断对象是某种类型的实例
+    //instanceof的右侧要求是一个构造函数，TypeScript将细化为：
+    //此构造函数的 prototype属性的类型，如果它的类型不为 any的话
+    //构造签名所返回的类型的联合
+    if(a instanceof string) console.log(a.length)
+    ```
