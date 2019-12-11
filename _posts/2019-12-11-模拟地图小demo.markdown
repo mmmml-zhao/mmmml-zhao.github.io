@@ -1,0 +1,292 @@
+---
+layout: main
+title: 自定义地图demo
+date: 2019-12-11 22:25:30 +0300
+description: 自定义地图demo,放大缩小拖曳点击功能。
+tags: [docker]
+---
+
+# 自定义地图demo
+分两层： 操作层与显示层  
+操作层监听用户各种事件，显示层只管将操作得来的数据进行显示。
+等待明天优化拖曳的边界情况。
+
+
+```javascript
+<template>
+  <div class="map-image">
+    <div class="map-image-container">
+      <div class="map-image-box" :style="imageStyle">
+        <img 
+          class="marker" 
+          src="https://3gimg.qq.com/lightmap/api_v2/2/4/122/theme/default/imgs/marker.png"
+          :style="markerStyle"
+        />
+      </div>
+    </div>
+    <div
+      class="map-image-wheel"
+      @wheel="setZoom"
+      @mousedown="handlerStart"
+      @mousemove="handlerMouseMove"
+      @mouseup="handlerEnd"
+      @mouseleave="handlerMouseleave"
+    ></div>
+    <!-- 由于 drop事件 导致操作出错 ，所以遇到就强行停止位移-->
+
+    <!-- @click="setImageXY"  @drop="handlerEnd" -->
+  </div>
+</template>
+
+<script>
+import { getBaseUrl } from "@/libs/util"
+
+export default {
+  name: "map_image",
+  components: {},
+  props: {
+    image_x: 0,
+    image_y: 0
+  },
+  data() {
+    return {
+      baseUrl: getBaseUrl(),
+      imageWidth: 60, // 图片宽度
+      imageHeight: 60, // 图片宽度
+      imageTop: 0, // 图片top偏移
+      imageLeft: 0, // 图片left偏移
+      zoom: 10, // 图片放大比例 用10 而不是1 是为了避免浮点数精度丢失
+      mouseWheelX: 0, // 滚轮触发事件时 鼠标在框内的位置 x
+      mouseWheelY: 0, // 滚轮触发事件时 鼠标在框内的位置 y
+      mouseType: "+", // +  - 本次操作是放大还是缩小
+      isClick: false, // 是否是点击事件 触发的mousemove
+      mousemove: {
+        x: null,
+        y: null
+      }, // 每次拖曳记住上一次的值
+      clickTimeStamp: 0 // 本次点击的开始时间 如果时间小于.5s则判定为点击 ,大于则是拖拽地图
+    }
+  },
+  watch: {},
+  computed: {
+    // 图片的偏移量
+    imageStyle() {
+      return {
+        height: `${this.imageWidth * this.zoom}px`,
+        width: `${this.imageHeight * this.zoom}px`,
+        top: `${this.imageTop * -1}px`,
+        left: `${this.imageLeft * -1}px`,
+        backgroundImage: `url('${this.baseUrl}/applets_images/map/small_map.png')`
+      }
+    },
+    // marker的偏移量
+    markerStyle() {
+      // setImageXY函数反推可知
+      // this.image_y * this.imageHeight * this.zoom === this.imageLeft + mouseClickX 
+      return {
+        top: `${this.image_y * this.imageHeight * this.zoom}px`,
+        left: `${this.image_x * this.imageWidth * this.zoom}px`
+      }
+    }
+  },
+  methods: {
+    // 鼠标点击事件开始
+    handlerStart(e) {
+      console.log(e)
+      this.isClick = true
+      this.clickTimestamp = e.timeStamp
+    },
+    // 鼠标移动事件
+    handlerMouseMove(e) {
+      if (this.isClick) {
+        console.log(e)
+        const x = e.offsetX || e.layerX
+        const y = e.offsetY || e.layerY
+        if (
+          (this.mousemove.x || this.mousemove.x === 0) &&
+          (this.mousemove.y || this.mousemove.y === 0)
+        ) {
+          const imageTop = this.imageTop + this.mousemove.y - y
+          const imageLeft = this.imageLeft + this.mousemove.x - x
+          // 边界情况处理
+          if (imageTop >= 0) {
+            this.imageTop = imageTop
+          }
+
+          if (imageLeft >= 0) {
+            this.imageLeft = imageLeft
+          }
+        }
+
+        this.$nextTick(() => {
+          this.mousemove = {
+            x,
+            y
+          }
+        })
+      }
+    },
+    // 鼠标点击事件结束
+    handlerEnd(e) {
+      this.isClick = false
+      this.mousemove = {
+        x: null,
+        y: null
+      }
+      if (e.timeStamp - this.clickTimestamp < 500) {
+        this.setImageXY(e)
+      }
+      // 鼠标可能会在移动中选中文本 导致下一次进去移动会变成拖拽东西 报错
+      window.getSelection().removeAllRanges()
+    },
+    // 鼠标移出触发区域会触发该函数
+    handlerMouseleave(e) {
+      this.isClick = false
+      this.mousemove = {
+        x: null,
+        y: null
+      }
+      // 鼠标可能会在移动中选中文本 导致下一次进去移动会变成拖拽东西 报错
+      window.getSelection().removeAllRanges()
+    },
+    // 下面三个计算偏移量的原理是
+
+    // wheel 事件
+    // 例如 top
+    // 当前鼠标相对与当前放大后图片顶部的y = (上一次的偏移量 + 本次鼠标的y )/(上一次的地图的放大倍数) * 本次放大倍数
+    // 当前偏移量 = 当前鼠标相对与放大后图片顶部的y - 本次鼠标的y //（这个值一定是正值，所以在定位时要加负号，设计的时候图片的左上角是0，0点，所以如果有偏移量一定是负值，可是偏移量负值与本次鼠标的y正值相加会抵消，为保持一致，所以偏移量算成正的，最后设置css时再加上负号）
+
+    // click
+    // 这个事件提交的数据要存储在数据库所以要用百分数，不管地图大小都能找到位置
+    // 例如top
+    // 当前鼠标相对与当前放大后图片顶部的y = 上一次的偏移量 + 本次鼠标的
+
+    // 点击标点事件
+    setImageXY(e) {
+      // console.log(e)
+      const mouseClickX = e.offsetX || e.layerX
+      const mouseClickY = e.offsetY || e.layerY
+      // const image_x = ((this.imageLeft + mouseClickX) / this.zoom) * 10
+      // const image_y = ((this.imageTop + mouseClickY) / this.zoom) * 10
+      const image_x = (this.imageLeft + mouseClickX) / this.zoom
+      const image_y = (this.imageTop + mouseClickY) / this.zoom
+      // 最终要存的数据是百分数 这里把 *10  /10 约分，注释是为了加强阅读 这个10 实际上是指没有放大时的zoom，这个可以时1可以是100, 所以这个参数不因该放到通用的代码里，因为最后对会被约分了
+      this.$emit("clickImage", {
+        value: {
+          // image_x: image_x / (this.imageWidth * 10),
+          // image_y: image_y / (this.imageHeight * 10)
+          image_x: image_x / this.imageWidth,
+          image_y: image_y / this.imageHeight
+        }
+      })
+    },
+    // 设置背景图片的偏移量 top
+    setImageTop() {
+      if (this.mouseType === "+") {
+        this.imageTop =
+          ((this.imageTop + this.mouseWheelY) / (this.zoom - 2)) * this.zoom -
+          this.mouseWheelY
+      } else {
+        if (this.zoom === 10) {
+          this.imageTop = 0
+        } else {
+          this.imageTop =
+            ((this.imageTop + this.mouseWheelY) / (this.zoom + 2)) * this.zoom -
+            this.mouseWheelY
+        }
+      }
+    },
+    // 设置背景图片的偏移量 left
+    setImageLeft() {
+      if (this.mouseType === "+") {
+        this.imageLeft =
+          ((this.imageLeft + this.mouseWheelX) / (this.zoom - 2)) * this.zoom -
+          this.mouseWheelX
+      } else {
+        if (this.zoom === 10) {
+          this.imageLeft = 0
+        } else {
+          this.imageLeft =
+            ((this.imageLeft + this.mouseWheelX) / (this.zoom + 2)) *
+              this.zoom -
+            this.mouseWheelX
+        }
+      }
+    },
+    // 设置放大缩小zoom
+    setZoom(e) {
+      // console.log(e)
+      e.preventDefault()
+      if (e.wheelDelta < 0) {
+        // 缩小
+        if (this.zoom > 10) {
+          this.mouseType = "-"
+          this.zoom -= 2
+          this.$nextTick(() => {
+            // wheel 事件  鼠标所在地X
+            this.mouseWheelX = e.offsetX || e.layerX
+            // wheel 事件  鼠标所在地Y
+            this.mouseWheelY = e.offsetY || e.layerY
+            this.setImageTop()
+            this.setImageLeft()
+          })
+        }
+      } else if (e.wheelDelta > 0) {
+        // 放大
+        if (this.zoom < 30) {
+          this.mouseType = "+"
+          this.zoom += 2
+          this.$nextTick(() => {
+            // wheel 事件  鼠标所在地X
+            this.mouseWheelX = e.offsetX || e.layerX
+            // wheel 事件  鼠标所在地Y
+            this.mouseWheelY = e.offsetY || e.layerY
+            this.setImageTop()
+            this.setImageLeft()
+          })
+        }
+      }
+    }
+  },
+  created() {},
+  mounted() {}
+}
+</script>
+<style lang="scss">
+</style>
+```
+
+```css
+.map-image{
+  position: relative;
+  .map-image-container{
+    height: 600px;
+    width: 600px;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    .map-image-box{
+      position: absolute;
+      @include bg-img-contain;
+      z-index: 1;
+    }
+    .marker{
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 39px;
+      transform: translate(-11px,-34px);
+      z-index: 10;
+    }
+  }
+  .map-image-wheel{
+    height: 600px;
+    width: 600px;
+    position: absolute;
+    top:0;
+    left: 0;
+    overflow: hidden;
+    z-index: 100;
+  }
+}
+```
