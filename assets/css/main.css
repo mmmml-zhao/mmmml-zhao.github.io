@@ -930,10 +930,10 @@ pre code {
 .content-box {
   padding: 20px;
   padding-left: 260px;
-  display: -webkit-box;
+  /* display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
-  display: flex;
+  display: flex; */
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
   -webkit-flex-direction: row;
@@ -1343,10 +1343,10 @@ a.newer-posts:hover {
   }
   .content-box {
     padding: 20px 10px;
-    display: -webkit-box;
+    /* display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
-    display: flex;
+    display: flex; */
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     -webkit-flex-direction: row;

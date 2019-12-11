@@ -13,7 +13,7 @@ tags: [docker]
 等待明天优化拖曳的边界情况。
 
 vue文件  
-
+ 
 ```javascript
 <template>
   <div class="map-image">
