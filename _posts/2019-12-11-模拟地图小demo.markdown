@@ -6,11 +6,13 @@ description: 自定义地图demo,放大缩小拖曳点击功能。
 tags: [docker]
 ---
 
-# 自定义地图demo
+# 自定义地图demo  
+
 分两层： 操作层与显示层  
 操作层监听用户各种事件，显示层只管将操作得来的数据进行显示。
 等待明天优化拖曳的边界情况。
 
+vue文件  
 
 ```javascript
 <template>
@@ -253,8 +255,10 @@ export default {
 }
 </script>
 <style lang="scss">
-</style>
-```
+</style> 
+```  
+
+css代码  
 
 ```css
 .map-image{
