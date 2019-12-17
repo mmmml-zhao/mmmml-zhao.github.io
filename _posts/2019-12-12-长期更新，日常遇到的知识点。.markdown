@@ -3,7 +3,7 @@ layout: main
 title: 日常更新知识点
 date: 2019-12-12 22:25:30 +0300
 description: 记录日常遇到的一些不常见的知识点。
-tags: [docker]
+tags: []
 ---
 
 1. ip访问网页情况下，cookie是不区分的，80端口也可以访问到81端口的cookie，只需要知道cookie的名称。
