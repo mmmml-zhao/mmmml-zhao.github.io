@@ -132,3 +132,9 @@ tags: [vue]
     },
   })
 ```
+  
+    
+具体的hookEvent源码解读可以查看下方的参考链接，就不贴出来了。
+
+
+参考链接：[hookEvent of Vue](https://juejin.im/post/5dadaf9ef265da5b860140a1)，[alligator.io](https://alligator.io/vuejs/component-event-hooks/)
