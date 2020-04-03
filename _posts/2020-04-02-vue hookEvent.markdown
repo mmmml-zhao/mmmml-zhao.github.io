@@ -3,7 +3,7 @@ layout: post
 title: vue hookEvent
 date: 2020-04-03 09:58:30 +0300
 description: 关于vue的生命周期事件。
-img: 2020-04-03/docker.png 
+img: 2020-04-03/vue-logo.png 
 tags: [vue]
 ---
 
