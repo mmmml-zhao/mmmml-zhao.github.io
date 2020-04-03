@@ -1,9 +1,8 @@
 ---
-layout: post
+layout: main
 title: dart基础知识
 date: 2019-12-19 19:47:30 +0300
 description: 学习dart基础知识。
-img: 2019-12-19/dart.svg
 tags: [dart]
 ---
 
