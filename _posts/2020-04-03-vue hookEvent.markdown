@@ -133,7 +133,9 @@ tags: [vue]
   })
 ```
   
-    
+## 注意
+当使用该方法监听子组件的生命周期时，`beforeCreate`、`beforeMount`、`beforeUpdate`、`beforeDestroy`几个生命周期无法被触发，还在研究。
+
 具体的hookEvent源码解读可以查看下方的参考链接，就不贴出来了。
 
 
