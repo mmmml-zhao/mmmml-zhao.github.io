@@ -1,6 +1,6 @@
 ---
 layout: post
-title: vue hookEvent
+title: vue3.0 使用踩坑
 date: 2020-11-28 11:52:30 +0300
 description: 关于vue的生命周期事件。
 img: 2020-11-28/vue-logo.png 
