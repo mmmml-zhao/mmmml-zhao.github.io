@@ -16,7 +16,7 @@ tags: [docker]
 1. 迅速过一遍docker文档（不记api,大概知道有什么配置即可）。
 2. 通过vue ui 建立vue项目，并本地预览，build生成编译后文件。
 3. `docker pull nginx` 下载nginx镜像，并根据[docker部署vue项目](https://www.jianshu.com/p/399e5a3c7cc5 "docker部署vue项目")，编写nginx配置。
-4. 编写*dockerfile*。
+4. 编写*dockerfile*。  
 ![初始路由定义](../assets/img/2019-12-08/dockerfile.jpg "初始路由定义")
 * 镜像拷贝自nginx。
 * 复制dist文件夹到指定文件夹。
