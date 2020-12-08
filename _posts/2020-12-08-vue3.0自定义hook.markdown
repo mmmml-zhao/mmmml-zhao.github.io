@@ -7,8 +7,6 @@ img: 2020-12-08/vue-logo.png
 tags: [vue,vue3.0,typescript,hook]
 ---
 
-# vue3.0自定义hook示例——useGetData
-
 该hook是用于方便发送请求的。
 
 ```typescript
