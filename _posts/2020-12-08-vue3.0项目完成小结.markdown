@@ -1,13 +1,12 @@
 ---
 layout: post
-title: vue3.0 使用踩坑
+title: vue3.0 项目完成小结
 date: 2020-12-08 11:10:30 +0300
 description: 第一个vue3.0项目的完结
 img: 2020-12-08/vue-logo.png 
 tags: [vue,vue3.0,typescript,ant design pro]
 ---
 
-# VUE3.0项目的小结
 
 ## 项目介绍
 ### 功能介绍
