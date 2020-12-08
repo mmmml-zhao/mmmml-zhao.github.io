@@ -1,0 +1,140 @@
+---
+layout: post
+title: vue3.0自定义hook示例——useGetData
+date: 2020-12-08 11:10:30 +0300
+description: 第一个vue3.0项目的完结
+img: 2020-12-08/vue-logo.png 
+tags: [vue,vue3.0,typescript,hook]
+---
+
+# vue3.0自定义hook示例——useGetData
+
+该hook是用于方便发送请求的。
+
+```typescript
+import { reactive, onMounted, Ref, toRef, toRaw, ref, UnwrapRef, readonly, DeepReadonly } from 'vue';
+// import { IRes } from '@/utils/axios';
+export interface IRes<T> {
+  status: number;
+  data: T;
+  message?: string;
+  errorMsg?: string;
+}
+
+interface UseGetDataOption<T> {
+  init?: boolean // 是否需要默认请求一次
+  requestConditions?: (data: T) => Boolean // 请求必须满足怎样的条件
+}
+
+export interface UseGetDataReturnData<REQUEST_DATA, DATA_PROPS> {
+  clearData: () => void // 清除数据
+  getData: () => Promise<IRes<DATA_PROPS>> // 获取数据
+  changeRequestData: (requestData: Partial<REQUEST_DATA>) => void; // 修改请求参数
+  requestLoading: Ref<boolean>; // 请求的loading
+  data: Ref<UnwrapRef<DATA_PROPS> | null>; // 该请求返回的数据
+  responseInfo: Ref<IRes<DATA_PROPS>>;// 该请求的返回的全部信息
+  readonly requestData: DeepReadonly<UnwrapRef<REQUEST_DATA>> // 返回只读的请求数据
+}
+
+function useGetData<REQUEST_DATA, DATA_PROPS>(request: (data: REQUEST_DATA) => Promise<IRes<DATA_PROPS>>, requestData: REQUEST_DATA, option: UseGetDataOption<UnwrapRef<REQUEST_DATA>> = { init: true }): UseGetDataReturnData<REQUEST_DATA, DATA_PROPS> {
+
+  const state = reactive<{
+    requestLoading: boolean,
+    data: DATA_PROPS | null,
+    responseInfo: IRes<DATA_PROPS> | null,
+    localRequestData: REQUEST_DATA
+  }>({
+    requestLoading: false,
+    data: null,
+    responseInfo: null,
+    localRequestData: requestData
+  })
+
+  const requestLoading = toRef(state, "requestLoading");
+  const data = toRef(state, "data");
+  const responseInfo = toRef(state, "responseInfo");
+  const localRequestData = toRef(state, "localRequestData");
+
+  const getData = async () => {
+    try {
+      if (option.requestConditions && !option.requestConditions(localRequestData.value)) {
+        console.log("不满足requestConditions")
+        return Promise.reject({
+          errorMsg: "请检查请求参数",
+          message: "请检查请求参数",
+        })
+      }
+      requestLoading.value = true
+      const res = await request(localRequestData.value as REQUEST_DATA)
+      data.value = res.data === null ? null : ref(res.data).value
+      responseInfo.value = res === null ? null : ref(res).value
+      requestLoading.value = false
+      return Promise.resolve(res)
+    } catch (e) {
+      responseInfo.value = e.errorMsg ? e : null
+      data.value = e.errorMsg ? e.data : null
+      requestLoading.value = false
+      return Promise.reject(e)
+    }
+  }
+
+  const changeRequestData = async (newRequestData: Partial<REQUEST_DATA>) => {
+    localRequestData.value = ref(Object.assign(toRaw(localRequestData.value), newRequestData)).value
+  }
+
+  const clearData = async () => {
+    data.value = null
+    responseInfo.value = null
+  }
+
+  const initUse = () => {
+    if (!option.init) return
+    getData()
+  }
+
+  onMounted(() => initUse())
+
+  return {
+    requestLoading,
+    data,
+    responseInfo,
+    requestData: readonly(localRequestData).value,
+    changeRequestData,
+    clearData,
+    getData,
+  }
+}
+export default useGetData;
+```
+
+使用方式
+```typescript
+// 获取数据的axios封装
+// service.ts 
+export async function getData(data: RequestData) {
+  return await http.request<DataProps[]>(axios)
+}
+
+// data.ts
+interface StateProps{
+  requestData: UseGetDataReturnData<RequestTimetableData, TimeTableData>; // 类型定义
+}
+
+// 初始化这个hook
+const requestData = useGetData(getData,
+  {
+   // 请求参数
+  },
+  {
+    init: false,
+  }
+), // 请求数据
+
+// 修改请求参数
+requestData.value.changeRequestData({
+  // 需要修改的字段
+})
+// 请求数据
+requestData.value.getData()
+
+```
