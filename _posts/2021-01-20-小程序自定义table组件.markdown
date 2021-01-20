@@ -1,0 +1,68 @@
+---
+layout: post
+title: 微信小程序table组件
+date: 2021-01-20 11:10:30 +0300
+description: 小程序自定义table组件。
+img: 2020-12-08/applets.png 
+tags: [小程序,微信,typescript]
+---
+
+
+
+# 前言
+移动端的页面本应该很少有table表格这样的展示、操作，但总归有这样的需求，然而平时用的vant和iview的小程序组件库都没有table组件，这里将自己编写的table组件展示一下供大家查看。  
+小程序实现table的问题在于，自定义td的实现，而小程序没办法像react一样使用`jsx`，也没办法像vue一样用`作用域插槽`传row行的信息给slot，但是小程序还是留有一样东西可以完成自定义td的功能。  
+
+## 抽象节点  
+>这个特性自小程序基础库版本 1.9.6 开始支持。  
+>有时，自定义组件模板中的一些节点，其对应的自定义组件不是由自定义组件本身确定的，而是自定义组件的调用者确定的。这时可以把这个节点声明为“抽象节点”。  
+>[微信官方api地址](https://developers.weixin.qq.com/miniprogram/dev/framework/custom-component/generics.html)  
+
+通过抽象节点我们可以做到使用自定义组件通过key值分发组件内容到不同的td里。
+具体的源码地址可点击下方查看，如果对你有帮助请点个star~~  
+[源码地址](https://github.com/kawaiiz/table_component)  
+
+具体的实现效果可以扫描下方的小程序码。  
+![小程序码](../assets/img/2021-01-20/applets_qr.jpg "小程序码")
+# API
+## prop
+| 参数 | 说明 | 类型 | 默认值 | 是否必填 |
+|-----|-----|-----|-----|-----|
+|columns|	表格的配置	| Columns[] | [] | true |
+|dataList|	数据	| any[] | [] |	true |
+|getListLoading|	请求列表的loading 	| boolean | false| true |
+|showTipImage|	无数据时的提示文本图片	| boolean | false| true |
+|rowKey|	用于指明行的唯一标识符，在勾选中有使用	| string | id | false |
+|scrollViewHeight|控制可滚动区域高度。|string| 600rpx|false |
+|tipTitle|	无数据时的提示文本主标题   | string | 提示 | false |
+|tipSubtitle|	无数据时的提示文本副标题 	| string |  暂无数据| false |
+|select|	控制是否出现勾选。 	| boolean | false| false |
+|selectKeys|	勾选的初始值 	| any[] | []| false |
+|generic:action-td|	当列表项内具有操作列，需要在`columns`内添加`type:action`的一项，操作列的内容往往需要自定义，小程序不提供react,vue的`rander函数`，所以使用到了抽象节点，该属性指明抽象节点的组件。操作列位置可以不固定，点击事件由`bindclickaction`触发	| component |undefined | false |
+|isExpand|	控制是否点击展开。 	| boolean | false|false |
+|expandValueKey|	展开信息的key值 	| string | false |
+|initExpandValue|	当展开信息为空时的默认提示语 	| string | '暂无信息' |false |
+|expandStyle|	 展开信息的最外层的样式	| string | ''|false |
+|generic:expand-component| 如果展开区域的内容需要自定义，`expandValueKey`设置为空字符串，则切换到组件模式，传一个组件进来，展开区域的点击事件由`bindclickexpand`触发	| component | undefined |false |
+|dynamicValue|	给自定义内容的动态值，用于改变状态 ，建议{value:放的数据}	| object | {} |false |
+
+## Events 
+|事件 | 解释| 类型|
+|-----|-----|-----|
+|bindclicklistitem| 点击列表行事件  |Function(e);  e.detail.value = {index:number（当前行序号）,item: any（当前行的内容）}|  
+|bindclickexpand| 点击展开内容事件  |Function(e); e.detail.value = {type:(这个按钮的含义字段，如‘close’),index:(当前的行),item:(当前行的数据)};(这是我这里定义的结构，具体可以自己定义在expand-component里)}|  
+|bindclickaction| 点击抽象节点事件 |Function(e); e.detail.value = {type:(这个按钮的含义字段，如‘close’),index:(当前的行),item:(当前行的数据)};(这是我这里定义的结构，具体可以自己定义在action-td里)}|  
+|bindcheckkey| 勾选事件 返回被勾选项的rowKey数组 |Function(e); e.detail.value = any[]//(数组内每一项是rowKey字段定义的数据的toString()结果)|  
+|bindscrolltolower| 滚动触底 | Function() |  
+|bindscrolltoupper| 滚动触顶 | Function() |
+  
+## column  
+列描述数据对象，是 columns 中的一项，Column 使用相同的 API。
+    
+|事件 | 解释| 类型| 必填|  
+|-----|-----|-----|-----|
+|title|字段名中文含义|string| true|
+|key|字段名|string| true|
+|width|单元格宽度|string| false|
+|type|判断字段是否是自定义组件|'action'/undefined | false|
+|render|td内内容由函数返回 (value: any, item: any, index: number, data?: 当前页面的this.data) => any,// 设置内容|function| false|
