@@ -3,7 +3,7 @@ layout: main
 title: 自定义地图demo
 date: 2019-12-11 22:25:30 +0300
 description: 自定义地图demo,放大缩小拖曳点击功能。
-tags: [docker]
+tags: [js]
 ---
 
 # 自定义地图demo  
