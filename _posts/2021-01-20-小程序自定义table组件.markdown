@@ -26,7 +26,7 @@ tags: [小程序,微信,typescript]
 ![小程序码](../assets/img/2021-01-20/applets_qr.jpg "小程序码")
 # API
 ## prop
-| 参数 | 说明 | 类型 | 默认值 | 是否必填 |
+| 参数 | 说明 | 类型 | 默认值 | 是否必填 |  
 |:-----|:-----|:-----|:-----|:-----|
 |columns|	表格的配置	| Columns[] | [] | true |  
 |dataList|	数据	| any[] | [] |	true |  
@@ -47,7 +47,7 @@ tags: [小程序,微信,typescript]
 |dynamicValue|	给自定义内容的动态值，用于改变状态 ，建议{value:放的数据}	| object | {} |false |  
 
 ## Events 
-| 事件 | 解释 | 类型 |
+| 事件 | 解释 | 类型 |  
 |:-----|:-----|:-----|
 |bindclicklistitem| 点击列表行事件  |Function(e);  e.detail.value = {index:number（当前行序号）,item: any（当前行的内容）}|  
 |bindclickexpand| 点击展开内容事件  |Function(e); e.detail.value = {type:(这个按钮的含义字段，如‘close’),index:(当前的行),item:(当前行的数据)};(这是我这里定义的结构，具体可以自己定义在expand-component里)}|  
