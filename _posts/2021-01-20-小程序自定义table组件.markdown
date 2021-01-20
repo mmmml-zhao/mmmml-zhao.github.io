@@ -23,9 +23,12 @@ tags: [小程序,微信,typescript]
 [源码地址](https://github.com/kawaiiz/table_component)  
 
 具体的实现效果可以扫描下方的小程序码。  
-![小程序码](../assets/img/2021-01-20/applets_qr.jpg "小程序码")
-# API
-## prop
+![小程序码](../assets/img/2021-01-20/applets_qr.jpg "小程序码")  
+
+# API  
+2
+## prop  
+
 | 参数 | 说明 | 类型 | 默认值 | 是否必填 |  
 |:-----|:-----|:-----|:-----|:-----|
 |columns|	表格的配置	| Columns[] | [] | true |  
@@ -46,7 +49,8 @@ tags: [小程序,微信,typescript]
 |generic:expand-component| 如果展开区域的内容需要自定义，`expandValueKey`设置为空字符串，则切换到组件模式，传一个组件进来，展开区域的点击事件由`bindclickexpand`触发	| component | undefined |false |  
 |dynamicValue|	给自定义内容的动态值，用于改变状态 ，建议{value:放的数据}	| object | {} |false |  
 
-## Events 
+## Events   
+
 | 事件 | 解释 | 类型 |  
 |:-----|:-----|:-----|
 |bindclicklistitem| 点击列表行事件  |Function(e);  e.detail.value = {index:number（当前行序号）,item: any（当前行的内容）}|  
