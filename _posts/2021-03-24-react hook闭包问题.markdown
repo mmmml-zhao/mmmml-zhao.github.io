@@ -3,7 +3,7 @@ layout: post
 title: react hook闭包问题
 date: 2021-03-24 17:29:30 +0300
 description: 项目遇到问题记录。
-img: 2021-01-22/react.svg
+img: 2021-03-24/react.svg
 tags: [react]
 ---  
 
