@@ -1,0 +1,34 @@
+---
+layout: main
+title: 脚手架搭建学习week3
+date: 2021-10-31 11:46:30 +0300
+description: 架构师之路
+tags: [脚手架]
+---
+
+## lerna add 添加注意点
+
+### 关于使用 lerna add 添加外部包导致内部包引用被删除
+
+1. 将版本改为\*号 优先匹配本地包  
+   ![lerna的add方法设置本地依赖图片](../assets/img/2021-10-31/lerna的add方法设置本地依赖图片.png "lerna的add方法设置本地依赖图片")
+2. lerna clean 清除
+3. lerna bootstrap --hoist 建立包之间链接
+4. lerna add 外部包
+
+### 关于不使用 lerna add 添加内部包
+
+1. 在 package 手动添加本地宝名称与版本号（版本号填\*）
+2. lerna link 建立连接
+
+### 原理
+
+lerna bootstrap 实际上是多个操作的集合，包含了 lerna link ，引用本地包使用 lerna 建立连接即可。
+lerna add 是不识别版本号为文件路径的，所以 lerna add 后会删除有关文件路径的文件。导致开始 lerna link 的文件消失。
+
+[参考链接](https://www.codenong.com/44491525/)
+
+## lerna publish 发布前注意点
+
+lerna publish 前登录 npmjs  
+使用`npm adduser`登录
