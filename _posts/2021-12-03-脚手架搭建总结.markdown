@@ -1,0 +1,91 @@
+---
+layout: main
+title: 脚手架搭建总结
+date: 2021-12-03 14:18:30 +0300
+description: 脚手架搭建相关
+tags: [脚手架]
+---
+
+## 目标
+编写类似vue-cli、create-react-app的脚手架插件，熟悉npm包的开发流程，熟悉node在npm里的使用。阅读部分插件源码。
+
+## 前置工作
+
+### 学习方式
+视频教程为辅助，倍速单节课大体逻辑后，编写代码，再将视频代码做比对。
+
+### 脚手架设计
+![脚手架设计图](../assets/img/2021-12-03/lerna-test-cli.jpg)
+具体实现主体框架与模板库的代码。
+
+### 技术主要关注点
+1. 脚手架的可扩展性
+2. 多包管理
+3. node相关知识
+4. npm 发布流程
+
+#### 脚手架的可扩展性
+可以拿vue-cli做例子，除了`vue create`创建项目，也可以通过`vue ui`通过可视化界面去配置项目，所以`command`相关模块需要有高扩展性，支持后续添加新的功能。
+
+#### 多包管理
+这里使用`lerna`，原因很简单，`lerna`是市面上常见的多包管理工具，npm包开发，还是多包前端项目开发都是有很多线上资料可以查询。
+
+#### node相关知识
+这里主要是对这相关的知识的匮乏，node自带api的使用，例如`child_porcess`，一些window与linux的命令区别，一些路径判断、命令行的输入输出相关常用插件，例如`inquirer`、`semver`等。
+
+#### npm 发布流程
+这里用了lerna的publish，大致熟悉了解了npm发包的基本规则，如个人只能发公开的包，包的版本号更新逻辑等。
+
+## 具体实现
+
+### 脚手架模块
+1. 核心流程：core 
+  * 执行准备 prepare 
+    检查版本号 → 检查 node 版本 → 检查root启动 → 检查用户主目录 → 检查入参 → 检查环境变量 → 检查是否为最新版本 → 提示更新
+  * 命令注册 registerCommand 
+    ■ 注册init命令 → 注册publish命令 → 注册clean命令 → 支持debug
+  * 命令执行
+2. 命令：commands 
+  * 初始化
+  * 发布
+  * ...
+3. 模型层：models 
+  * Command 命令
+  * Project 项目
+  * Component 组件
+  * Npm 模块
+  * Git 仓库
+4. 支撑模块：utils 
+  * Git 操作
+  * 云构建
+  * 工具方法
+  * API 请求
+  * Git API 
+### 拆分原则  
+根据模块的功能拆分：
+
+* 核心模块 cores
+* 命令模块 commands
+* 模型模块 models
+* 工具模块 utils  
+
+### 代码仓库
+[源码地址](https://github.com/kawaiiz/lerna-test)
+
+### 使用方式
+1. 全局安装脚手架
+`npm install @zml-lerna-test/core -g`
+2. `zml-lerna-test init [项目名]`
+3. 根据命令行操作
+
+## 总结
+本次学习包含了搭建一个脚手架的大体功能，收获的经验有:
+1. 如何在本地编写一个npm包。
+2. 学习他人关于模块设计、流程设计的经验。
+3. 在npm包里使用node进行一些系统操作，一些常用的包开发插件了解使用。
+4. 阅读`child_process`、`ejs`源码。
+5. npm发包流程。
+
+
+
+
