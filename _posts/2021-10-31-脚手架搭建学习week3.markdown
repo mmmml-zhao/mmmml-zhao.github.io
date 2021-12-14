@@ -8,7 +8,9 @@ tags: [脚手架]
 
 ## lerna add 添加注意点
 
-1. 不要添加版本号 优先匹配本地包  
+### 关于使用 lerna add 添加外部包导致内部包引用被删除
+
+1. 将版本改为本地包版本号 优先匹配本地包  
    ![lerna的add方法设置本地依赖图片](../assets/img/2021-10-31/lerna的add方法设置本地依赖图片.png "lerna的add方法设置本地依赖图片")
 2. lerna clean 清除
 3. lerna bootstrap --hoist 建立包之间链接
