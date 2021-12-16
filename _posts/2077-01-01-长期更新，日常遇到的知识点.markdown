@@ -14,17 +14,21 @@ tags: []
 1.<!DOCTYPE> 声明位于文档中的最前面，处于 `<html>` 标签之前。告知浏览器的解析器，用什么文档类型 规范来解析这个文档。  
 2.严格模式的排版和 JS 运作模式是 以该浏览器支持的最高标准运行。在混杂模式中，页面以宽松的向后兼容的方式显示。模拟老式浏览器的行为以防止站点无法工作。  
 3.DOCTYPE不存在或格式不正确会导致文档以混杂模式呈现。  
-意义：统一严格模式可以使得所有的浏览器对页面的解析渲染方式相同，解决兼容性问题 </div>
+意义：统一严格模式可以使得所有的浏览器对页面的解析渲染方式相同，解决兼容性问题  
+
 4. 简述document.write和 innerHTML的区别。  
 document.write只能重绘整个页面,  
 innerHTML可以重绘页面的一部分  
+
 5. 你知道的，javascript语言的执行环境是"单线程模式"，这种模式的好处是实现起来比较简单，执行环境相对单纯；坏处是只要有一个任务耗时很长，后面的任务都必须排队等着，会拖延整个程序的执行，因此很多时候需要进行“异步模式”，请列举js异步编程的方法。  
 回调函数，这是异步编程最基本的方法。  
 事件监听，另一种思路是采用事件驱动模式。任务的执行不取决于代码的顺序，而取决于某个事件是否发生。  
 发布/订阅，上一节的"事件"，完全可以理解成"信号"。  
-Promises对象，Promises 对象是CommonJS 工作组提出的一种规范，目的是为异步编程提供统一接口。    
+Promises对象，Promises 对象是CommonJS 工作组提出的一种规范，目的是为异步编程提供统一接口。  
+
 6. 用户从手机的浏览器访问www.baidu.com，看到的可能跟桌面PC电脑，是不太一样的网页效果，会更适合移动设备使用。请简要分析一下，实现这种网页区分显示的原因及技术原理。  
 手机的网速问题、屏幕大小、内存、CPU等。通过不同设备的特征，实现不同的网页展现或输出效果。根据useragent、屏幕大小信息、IP、网速、css media Query等原理，实现前端或后端的特征识别和行为改变。  
+
 7. 请你谈谈DNS的寻址过程    
 作用：将url解析为ip地址  
 第一步：检查DNS缓存，如果之前登陆过这个网站，那么DNS缓存中就会存有该链接对应的IP地址。  
@@ -64,5 +68,23 @@ Promises对象，Promises 对象是CommonJS 工作组提出的一种规范，目
   `dp[i]=num[i]+max(dp[i-1],0)`;  
   3，边界条件判断，当i等于0的时候，也就是前1个元素，他能构成的最大和也就是他自己，所以dp[0]=num[0];   
   链接：https://leetcode-cn.com/leetbook/read/top-interview-questions-easy/xn3cg3/?discussion=OQJnK2
-  来源：力扣（LeetCode）
-  
+  来源：力扣（LeetCode）  
+
+9. Promise resolve()reject() 之后的语句还是会执行 所以最好立即return  
+
+10. new关键字的作用
+```javascript
+function new2(fn,...函数参数){
+    // 1. 创建空对象
+    let obj = new Object();
+    // 2. 链接原型
+    let con = [].shift.call(arguments) 
+    obj.__proto__ = con.prototype
+    // 3. 绑定this
+    let res = con.apply(obj,arguments)
+    // 4. 返回新对象
+    return typeof res === 'object'?res:obj;
+}
+```
+    
+11. 事件流：现在标准，DOM2级事件流，即首先进行事件捕获流，然后到达事件所在的标签后，进行处理，然后在开始进行事件冒泡流，类似于koa2中的洋葱模型
