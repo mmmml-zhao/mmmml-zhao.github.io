@@ -1,0 +1,80 @@
+---
+layout: post
+title: next实践及遇到的问题
+date: 2022-03-03 16:20:30 +0300
+description: next实践及遇到的问题
+img: 2022-03-03/next-logo.svg
+tags: [next]
+---
+
+## 个人认识
+舒适点：  
+1. 没有繁杂的配置，极少的服务端专属代码。
+2. 按文件夹的路由配置简单易懂。连router文件都也不用写了。
+3. 内置插件齐全，便于前端开发。
+
+不适点：  
+1. cookie难在客户端与服务端统一。
+2. next接入css、less、scss的配置文档不够全与引入的方式还不够自由。
+
+## case
+1. 接入antd，css如何处理  
+```javascript
+const withLess = require('next-with-less');
+/**
+ * @type {import('next').NextConfig}
+ **/
+module.exports = withLess({
+  lessLoaderOptions: {
+    // ...
+  },
+});
+```
+
+2. 想使用less想使用module模式  
+文件名修改为 ***.module.less
+
+3. 如何处理cookie  
+这里的问题在于，没办法给服务端的请求统一配置cookie，因为多个请求会共用一个请求实例。so，服务端现在是请求时传入req，调用时实时去取。
+
+4. 第三方script处理  
+如果不使用_docment.tsx，则无法自定义script标签的插入位置，也很难优雅的处理动态插入script后的一些事件，so，升级到11，使用next/script，只需考虑什么时候加载，还提供了onLoad事件，执行init函数。  
+不能将Script组件放到Head组件内
+
+5. middleware  
+这个是个好东西，升级到12.1后即可编写。
+可用于鉴权、验证、机器人保护、重定向和重写、处理不支持的浏览器、功能标志和 A/B 测试、服务器端分析、高级 i18n 路由要求、日志记录
+
+6. rewrites  
+页面或api请求重写，next.config.js编写rewrites正则配置，即可实现反向代理功能。
+
+7. jest  
+内置jest，可快速配置。
+
+8. wap端px->rem  
+内置postcss，配置`postcss-pxtorem`即可实现。高版本next不支持postcss-px2rem-include。
+```javascript
+module.exports = {
+  plugins: {
+    'postcss-flexbugs-fixes': {},
+    'postcss-preset-env': {
+      autoprefixer: {
+        flexbox: 'no-2009',
+      },
+      stage: 3,
+      features: {
+        'custom-properties': false,
+      },
+    },
+    'postcss-pxtorem': {
+      rootValue: 37.5,
+      propList: ['*'],
+      exclude: function (file) {
+        return (
+          file.indexOf('components_m') === -1 && file.indexOf('common_m') === -1
+        );
+      },
+    },
+  },
+};
+```
