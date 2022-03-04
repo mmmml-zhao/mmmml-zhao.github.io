@@ -3,7 +3,7 @@ layout: post
 title: next实践及遇到的问题
 date: 2022-03-03 16:20:30 +0300
 description: next实践及遇到的问题
-img: 2022-03-03/next-logo.svg
+img: 2022-03-03/nextjs-logo.png
 tags: [next]
 ---
 
@@ -14,8 +14,8 @@ tags: [next]
 3. 内置插件齐全，便于前端开发。
 
 不适点：  
-1. cookie难在客户端与服务端统一。
-2. next接入css、less、scss的配置文档不够全与引入的方式还不够自由。
+1. cookie难在客户端与服务端统一配置。
+2. next接入css、less、scss的配置文档不够全。
 
 ## case
 1. 接入antd，css如何处理  
