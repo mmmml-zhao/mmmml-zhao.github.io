@@ -8,14 +8,14 @@ tags: [git,github]
 
 1. 如果有两个github在同一台电脑上要怎么办？  
 公司用的github与个人用的github，需要在公司电脑拉去个人的blog项目，可以全局登录公司的github，blog项目则可以通过生成`access tokens`，然后通过下面这句命令将鉴权信息插入`git remote`。
-``` sh
+```sh
 #!/bin/bash
 git remote add origin https://<username>:<access_tokens>@github.com/kawaiiz/kawaiiz.github.io.git
 ```
 
-2. 如果引用了私有仓库的package，无法下载怎么办？
-添加
-```
+2. 如果引用了私有仓库的package，无法下载怎么办？  
+添加.npmrc文件在项目根目录
+```config
 registry=https://registry.npmjs.org/
 <目标组织>:registry=https://npm.pkg.github.com/
 _authToken=<鉴权token>
