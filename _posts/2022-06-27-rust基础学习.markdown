@@ -1,0 +1,327 @@
+---
+layout: post
+title: rust
+date: 2022-06-27 03:34:30 +0300
+description: rust基础学习
+img: 2022-06-27/rustacean-flat-happy.svg
+tags: [rust]
+---
+
+## 常见编程概念
+
+### 变量与可变性  
+1. 变量  
+    ```rust
+    let mut guess = 5;
+    ```
+    let 变量的标识符。  
+    mut 意味该变量是可改变的  
+    guess 变量名   
+
+2. 可变性  
+    在 Rust 中，变量默认是不可改变的（immutable），在变量名之前加 mut 来使其可变。
+
+3. 常量  
+    ```rust
+    const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
+    ```
+    类似于不可变变量，常量(constants) 是绑定到一个名称的不允许改变的值。Rust 对常量的命名约定是在单词之间使用全大写加下划线。
+
+4. 隐藏（Shadowing）
+    ```rust
+    fn main() {
+        let x = 5;
+
+        let x = x + 1;
+
+        {
+            let x = x * 2;
+            println!("The value of x in the inner scope is: {}", x);
+        }
+
+        println!("The value of x is: {}", x);
+    }
+    ```
+    这个程序首先将 x 绑定到值 5 上。接着通过 let x = 隐藏 x，获取初始值并加 1，这样 x 的值就变成 6 了。然后，在内部作用域内，第三个 let 语句也隐藏了 x，将之前的值乘以 2，x 得到的值是 12。当该作用域结束时，内部 shadowing 的作用域也结束了，x 又返回到 6。   
+
+    区别一)  
+    当不小心尝试对变量重新赋值(无mut关键字)时，如果没有使用 let 关键字，就会导致编译时错误。通过使用 let，我们可以用这个值进行一些计算，不过计算完之后变量仍然是不可变的。  
+    区别二)  
+    mut 与隐藏的另一个区别是，当再次使用 let 时，实际上创建了一个新变量，我们可以改变<b>值的类型</b>，并且复用这个名字。
+
+### 数据类型  
+Rust 中，每一个值都属于某一个 <b>数据类型（data type）</b>，这告诉 Rust 它被指定为何种数据，以便明确数据处理方式。Rust 是 <b>静态类型（statically typed）</b>语言，也就是说在编译时就必须知道所有变量的类型。
+
+#### 标量类型  
+标量（scalar）类型代表一个单独的值。Rust 有四种基本的标量类型：整型、浮点型、布尔类型和字符类型。  
+1. 整形
+    | 长度 | 有符号	| 无符号 |  
+    | ---- | ---- | ---- |  
+    | 8-bit |i8	| u8|
+    |16-bit	|i16	|u16|
+    |32-bit	|i32	|u32|
+    |64-bit	|i64	|u64|
+    |128-bit	|i128	|u128|
+    |arch	|isize	|usize|
+
+    整型溢出：当实际赋值超过了约定的类型最大表示值，则视为溢出。在debug模式与release构建中表现不同。
+
+2. 浮点型  
+    f32 和 f64，分别占 32 位和 64 位。默认类型是 f64。所有的浮点型都是有符号的。
+
+3. 数值运算
+    数值运算需要注意运算项的类型要保持一致。
+
+4. 布尔型  
+    true 和 false。Rust 中的布尔类型使用 bool 表示。
+
+5. 字符类型  
+    char 类型是Rust语言中最原生的字母类型，用单引号声明 char 字面量。
+
+#### 复合类型  
+1. 元组类型  
+    元组将多个其他类型的值组合进一个复合类型的主要方式。长度固定。包含在圆括号中的逗号分隔的值列表。
+    ```rust
+    let tup: (i32, f64, u8) = (500, 6.4, 1);
+    ```  
+2. 数组类型  
+    数组中的每个元素的类型必须相同。Rust中的数组长度是固定的。
+    
+    ```rust
+    // 方括号中包含每个元素的类型，后跟分号，再后跟数组元素的数量。
+    let a: [i32; 5] = [1, 2, 3, 4, 5];
+
+    // 方括号中指定初始值加分号再加元素个数的方式来创建一个每个元素都为相同值的数组
+
+    let a = [3; 5];
+    ```  
+
+### 函数
+fn 关键字用来声明新函数。函数和变量名使用 snake case 规范风格。所有字母都是小写并使用下划线分隔单词。函数体由一系列的语句和一个可选的结尾表达式构成。  
+
+#### 函数体由一系列的语句和一个可选的结尾表达式构成。  
+##### 语句
+语句不返回值。
+```rust
+let y = 6; 
+```
+
+##### 表达式
+表达式会返回值。表达式的结尾没有分号。如果在表达式的结尾加上分号，它就变成了语句，而语句不会返回值。
+```rust
+x + 1
+```
+
+#### 具有返回值的函数
+箭头（->）后声明返回值类型的类型，返回值表达式后会退出当前函数域。
+```rust
+fn five() -> i32 {
+    5
+    // 下面这句会导致报错。放在5上面则不会。
+    // println!("是否退出");
+}
+```
+
+### 注释  
+惯用的注释样式是以两个斜杠开始注释，并持续到本行的结尾。对于超过一行的注释，需要在每一行前都加上 `//`。
+
+### 控制流   
+根据条件是否为真来决定是否执行某些代码，以及根据条件是否为真来重复运行一段代码的能力。 
+1. if 表达式   
+    if 表达式都以 if 关键字开头，其后跟一个条件，可选的 else 表达式来提供一个在条件为假时应当执行的代码块， else if 表达式与 if 和 else 组合来实现多重条件。
+    ```rust
+    if number % 4 == 0 {
+        println!("number is divisible by 4");
+    } else if number % 3 == 0 {
+        println!("number is divisible by 3");
+    } else if number % 2 == 0 {
+        println!("number is divisible by 2");
+    } else {
+        println!("number is not divisible by 4, 3, or 2");
+    }
+    ```
+    因为 if 是一个表达式，我们可以在 let 语句的右侧使用。
+    ```rust
+    let number = if condition { 5 } else { 6 };
+    ```
+
+2. 循环  
+    Rust 有三种循环：loop、while 和 for。 break 关键字来告诉程序何时停止循环，循环中的 continue 关键字告诉程序跳过这个循环迭代中的任何剩余代码，并转到下一个迭代。
+    loop:    
+    ```rust
+    fn main() {
+        let mut count = 0;
+        'counting_up: loop {
+            println!("count = {}", count);
+            let mut remaining = 10;
+
+            loop {
+                println!("remaining = {}", remaining);
+                if remaining == 9 {
+                    break;
+                }
+                if count == 2 {
+                    break 'counting_up;
+                }
+                remaining -= 1;
+            }
+
+            count += 1;
+        }
+        println!("End count = {}", count);
+    }
+    ```
+    从循环返回值
+    ```rust
+    fn main() {
+        let mut counter = 0;
+
+        let result = loop {
+            counter += 1;
+
+            if counter == 10 {
+                break counter * 2;
+            }
+        };
+
+        println!("The result is {}", result);
+    }
+    ```
+    
+    while 条件循环：  
+    ```rust
+    fn main() {
+        let mut number = 3;
+
+        while number != 0 {
+            println!("{}!", number);
+
+            number -= 1;
+        }
+
+        println!("LIFTOFF!!!");
+    }
+    ```
+
+    for 遍历集合：  
+    ```rust
+    fn main() {
+        let a = [10, 20, 30, 40, 50];
+
+        for element in a {
+            println!("the value is: {}", element);
+        }
+    }
+    ```
+
+### 小实践
+
+#### 相互转换摄氏与华氏温度。
+```rust
+use std::io;
+
+fn c_to_h (value:f32) ->f32 {
+    value * 9./5. +32.
+}
+
+fn h_to_c (value:f32) ->f32 {
+    (value - 32.)*5./9.
+}
+
+fn main() {
+    println!("test:c_to_h, {}", c_to_h(0.));
+    println!("test:h_to_c, {}", h_to_c(0.));
+
+    let mut c_type = String::new();
+    
+    println!("please input transform type:\n 1):'c->h'\n 2):'h->c'");
+    
+    io::stdin()
+        .read_line(&mut c_type)
+        .expect("please check input");
+    
+    let c_type = c_type.trim();
+
+    println!("input type: {}",&c_type);
+    
+    println!("c_type == \"1\":{}",c_type == "1");
+
+    let mut value = String::new();
+    
+    println!("please input value");
+    
+    io::stdin()
+        .read_line(&mut value)
+        .expect("please check input");
+    
+    println!("input value: {}", &value);
+    
+    let value:f32 = match value.trim().parse() {
+        Ok(num) => num,
+        Err(_) => {
+            println!("lease check input");
+            0.
+        },
+    };
+    
+    let type_text:String;
+
+    let result:f32;
+    
+    if  c_type == "1".to_string()  {
+        result = c_to_h(value);
+        type_text = "摄氏度转华氏温度".to_string();
+    } else {
+        result = h_to_c(value);
+        type_text = "华氏温度转摄氏度".to_string();
+    }
+    
+    println!("转化类型 {}：{} -> {}",type_text,value,result)
+}
+```
+
+#### n阶 斐波那契数列
+
+```rust
+
+use std::io;
+
+fn main() {
+    println!("请输入需要打印的阶数");
+    let mut x = String::new();
+    io::stdin()
+        .read_line(&mut x)
+        .expect("please check input");
+    let mut x:i32 = match x.trim().parse() {
+        Ok(num) => num,
+        Err(_) =>{
+            println!("please check input");
+            3
+        }
+    };
+    let mut first = 0;
+    let mut second = 1;
+    println!("{}",first);
+    println!("{}",second);
+    loop {
+        if x<=2 {
+            break;
+        }
+        let three = first + second;
+        println!("{}",three);
+        first = second;
+        second = three;
+        x -= 1
+    }
+    println!("end")
+
+}
+```
+
+## 所有权
+一些语言中具有垃圾回收机制，在程序运行时不断地寻找不再使用的内存；在另一些语言中，程序员必须亲自分配和释放内存。Rust 则选择了第三种方式：通过所有权系统管理内存，编译器在编译时会根据一系列的规则进行检查。
+
+### 所有权规则  
+1. Rust 中的每一个值都有一个被称为其 所有者（owner）的变量。
+2. 值在任一时刻有且只有一个所有者。
+3. 当所有者（变量）离开作用域，这个值将被丢弃。
