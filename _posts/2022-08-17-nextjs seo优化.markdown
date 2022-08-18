@@ -7,22 +7,22 @@ img: 2022-08-17/nextjs-logo.png
 tags: [next,seo.swr]
 ---
 
-0. 想不出标题的0  
+1. 想不出标题
   入职新公司以来，主要是负责新业务线的官网页面与后台管理系统。  
   因为是官网，所以seo自然是必不可少的，而公司的前端技术栈，基本都是react+typescript，so，新的官网选择的是nextjs。  
 
-1. 实现搭配  
-  nextjs + typescript + useSwr + react context
+2. 实现搭配  
+  nextjs + typescript + useSwr + react context  
   nextjs 与 typescript 已经是固定搭配了，useSwr呢则是官方推荐的请求库，在考察之后，果断也是选用了这个包。官网项目并不复杂，context也足够使用。
-  swr官方地址：https://swr.vercel.app/zh-CN  （“SWR” 这个名字来自于 stale-while-revalidate：一种由 HTTP RFC 5861 推广的 HTTP 缓存失效策略。这种策略首先从缓存中返回数据（过期的），同时发送 fetch 请求（重新验证），最后得到最新数据。）
+  swr官方地址：[https://swr.vercel.app/zh-CN](https://swr.vercel.app/zh-CN)  （“SWR” 这个名字来自于 stale-while-revalidate：一种由 HTTP RFC 5861 推广的 HTTP 缓存失效策略。这种策略首先从缓存中返回数据（过期的），同时发送 fetch 请求（重新验证），最后得到最新数据。）
 
-2. 动态数据的ssr实现  
+3. 动态数据的ssr实现  
   在nextjs上实现方式很清晰。  
   使用getServerSideProps，在服务器端先获取需要预渲染的数据。通过props传到页面内。服务器端预渲染时，等于是渲染静态页面一般。
   实现起来简单，但是在数据交互上就有点麻烦了。这个的问题在于，通过props传到顶级的页面组件，再一层层传到使用的地方，则显得过于笨拙。    
   so，使用swr吧。 
-  与nextjs的搭配使用：https://swr.vercel.app/zh-CN/docs/with-nextjs  
-  当了解了搭配使用的方法后，这里着重说一下swr的key，已经什么样的接口用什么样的key。  
+  与nextjs的搭配使用：[https://swr.vercel.app/zh-CN/docs/with-nextjs](https://swr.vercel.app/zh-CN/docs/with-nextjs)  
+  当了解了搭配使用的方法后，这里着重说一下swr的key，以及什么样的接口用什么样的key。  
   key的类型:    
   ![swr key](../assets/img/2022-08-17/swr-key.jpeg)    
     * string：这种适合请求固定的配置项，一次请求，在该次网页的生命周期中能重复使用。
@@ -32,7 +32,8 @@ tags: [next,seo.swr]
     * 如果key是一个函数，则函数的返回值遵从上述的逻辑    
       
     这次踩的坑就是，在getServerSideProps，使用对象做key，而客户端第一次渲染时，key为函数返回的值与props.fallback的key不同（这很大程度时我写的代码问题😭）。  
-    因为该项目的首屏渲染与url上的参数有关，在getServerSideProps中，是直接通过context取出query使用。而在react代码中，初始化项目，将参数收集到context后，再由组件取出来消费，这样导致第一次渲染，封装request的hook并不能直接拿到url的参数（用的默认值 or undefined），导致在swr中生成的对象key，与在getServerSideProps中生成的不一致，取不到预请求的数据。从而输出的html中没有动态数据那一块。  
+    因为该项目的首屏渲染与url上的参数有关，在getServerSideProps中，是直接通过context取出query使用。而在react代码中，初始化项目，将参数收集到context后，再由组件取出来消费，这样导致第一次渲染，封装request的hook并不能直接拿到url的参数（用的默认值 or undefined），导致在swr中生成的对象key，与在getServerSideProps中生成的不一致，取不到预请求的数据，从而输出的html中没有动态数据那一块。  
+    
     ```javascript
     // getServerSideProps中
     {
@@ -95,5 +96,5 @@ tags: [next,seo.swr]
     export default initPageSeoRequest;
     ```
 
-3. 结  
+4. 结  
   最后呢，官网终于可以完整的直出带有动态数据的网页了，虽然同事们看不出效果，老板也不加鸡腿，但是问题不大，小照好棒好棒好棒。
