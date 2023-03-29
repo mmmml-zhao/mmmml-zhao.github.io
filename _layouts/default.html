@@ -6,20 +6,4 @@
 
     {% include analytics.html %}
   </body>
-  <script>
-    var timer = setInterval(() => {
-      if (window && window.L2Dwidget) {
-        clearInterval(timer);
-        var config = {
-          model: {
-            jsonPath: "/assets/live2dw/tororo/tororo.model.json",
-          },
-          display: { position: "right", width: 150, height: 300, hOffset: 100 },
-          mobile: { show: false },
-          react: { opacityDefault: 1, opacityOnHover: 1 },
-        };
-        window.L2Dwidget.init(config);
-      }
-    }, 1000);
-  </script>
 </html>
