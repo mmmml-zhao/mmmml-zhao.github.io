@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-{% include head.html %}
-<body>
+  {% include head.html %}
+  <body>
+    <div class="wrapper">{{ content }}</div>
 
-  <div class="wrapper">
-    {{ content }}
-  </div>
-  
-  {% include analytics.html %}
-</body>
+    {% include analytics.html %}
+  </body>
+  <script>
+    var timer = setInterval(() => {
+      if (window && window.L2Dwidget) {
+        clearInterval(timer);
+        var config = {
+          model: {
+            jsonPath:
+              "https://unpkg.com/live2d-widget-model-tororo@1.0.5/assets/tororo.model.json",
+            // "https://unpkg.com/live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json"
+          },
+          display: { position: "left", width: 150, height: 300 },
+          mobile: { show: false },
+          react: { opacityDefault: 1, opacityOnHover: 1 },
+        };
+        window.L2Dwidget.init(config);
+      }
+    }, 1000);
+  </script>
 </html>
