@@ -1,7 +1,7 @@
 title: 照明胧
 description: > # this means to ignore newlines until "baseurl:"
   这是用于记录日常一些笔记的blog，废弃了一年多，要重新启动了。内容有关js,vue,react,ts,node,koa2。如果你进入了这里，希望能对你有帮助
-permalink: ':title/'
+permalink: ":title/"
 baseurl: "/" # the subpath of your site, e.g. /blog
 url: "mmmml-zhao.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
@@ -14,9 +14,6 @@ email: 690902636@qq.com # add your Email address
 
 # Disqus
 discus-identifier: mr-brown # add your discus identifier
-
-# Tracker
-analytics: # Google Analytics
 
 # Build Settings
 markdown: kramdown
