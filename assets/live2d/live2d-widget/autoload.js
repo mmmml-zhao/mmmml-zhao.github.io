@@ -24,14 +24,8 @@ function loadExternalResource(url, type) {
 	});
 }
 
-// 加载 waifu.css live2d.min.js waifu-tips.js
-if (screen.width >= 768) {
-	Promise.all([
-		loadExternalResource(live2d_path + "waifu.css", "css"),
-		loadExternalResource(live2d_path + "live2d.min.js", "js"),
-		loadExternalResource(live2d_path + "waifu-tips.js", "js")
-	]).then(() => {
-		// 配置选项的具体用法见 README.md
+function initLive2d () {
+	if(initWidget){
 		initWidget({
 			display:{
 				width: 150,
@@ -44,7 +38,23 @@ if (screen.width >= 768) {
 			},
 			mobile:{
 				show:false
-			}
+			},
+			cdnPath: "https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/"
 		});
+	}else {
+		setTimeout(initLive2d,1000)
+	}
+}
+
+
+// 加载 waifu.css live2d.min.js waifu-tips.js
+if (screen.width >= 768) {
+	Promise.all([
+		loadExternalResource(live2d_path + "waifu.css", "css"),
+		loadExternalResource(live2d_path + "live2d.min.js", "js"),
+		loadExternalResource(live2d_path + "waifu-tips.js", "js")
+	]).then(() => {
+		// 配置选项的具体用法见 README.md
+		initLive2d()
 	});
 }
