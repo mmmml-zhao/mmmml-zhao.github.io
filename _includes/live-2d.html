@@ -1,1 +1,24 @@
-<script src="/assets/live2d/live2d-widget/autoload.js"></script>
+<script src="/assets/live2d/live2d-widget/live2d.min.js"></script>
+
+<script>
+  L2Dwidget.init({
+    model: {
+      jsonPath: "/assets/live2d/model/hijiki/hijiki.model.json",
+      scale: 1,
+    },
+    display: {
+      position: "right",
+      width: 150,
+      height: 300,
+      hOffset: 50,
+    },
+    mobile: {
+      show: false,
+      scale: 0.5,
+    },
+    react: {
+      opacityDefault: 0.7,
+      opacityOnHover: 0.2,
+    },
+  });
+</script>
