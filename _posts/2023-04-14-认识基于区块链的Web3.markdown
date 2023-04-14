@@ -1,7 +1,7 @@
 ---
 layout: main
 title: 认识基于区块链的Web3
-date: 2023-04-14 17:57:30 +0300
+date: 2023-04-13 17:57:30 +0300
 description: 对基于区块链的 Web3 的了解、记录。
 tags: [区块链, web3, 以太网]
 ---
