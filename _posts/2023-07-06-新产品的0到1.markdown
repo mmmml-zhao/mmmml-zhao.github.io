@@ -6,17 +6,17 @@ description: github验证问题
 tags: [产品,思考]
 ---
 
-1. single
+1. single  
    从周围找到“机会”的蛛丝马迹。
-2. real need
-   确认是否是真实的需求。从目标用户处确认，灵魂三连追问，如果能准确的回答出来，多半是真实需求。开展相关聚会讨论。
-3. find value position
+2. real need  
+   确认是否是真实的需求。从目标用户处确认，目标用户不一定知道自己的真实需求，灵魂三连追问，如果能准确的回答出来，多半是真实需求。尝试将发现总结为一个简单的句子。
+3. find value position  
    找到“机会”在整个行业产业链的地位。了解自己的上游、下游、竞对、伙伴。
-4. prove assumptions
-   
-5. design concept
-   设计原型，无需精确到细节，用三句话提炼出需求。
-6. market analyst
-   市场分析，设定项目的roadmap。
-7. set business csf
-   设置关键成功因素 （CSF） 和听起来一样重要和直接！它们是您的业务或项目对其领域成功至关重要的要点。它们还使您的员工专注于工作，并确保任务和项目在团队和部门之间保持一致。
+4. prove assumptions 
+   进行市场分析调查。一对一的正式客户询问。开展相关聚会讨论。
+5. design concept  
+   设计原型，需要逻辑闭环，无需精确到细节，用三句话提炼出需求。
+6. market analyst  
+   市场分析。从未来想要到达的程度，倒推出现在的目标。
+7. 设定项目的roadmap
+   制定3-5年的商业结果。创建计划，并设置里程碑。设定短期目标，并用关键成功因素法(Critical Success Factors，CSF)验证目标。
