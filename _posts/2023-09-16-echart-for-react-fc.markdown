@@ -3,8 +3,10 @@ layout: main
 title: echarts-for-react-fc
 date: 2023-09-16 13:30:30 +0300
 description: echarts
-tags: [echarts]
+tags: [echarts, react, hooks]
 ---
+
+# echarts-for-react-fc
 
 <!-- [![npm](https://img.shields.io/npm/v/echarts-for-react-fc.svg)](https://www.npmjs.com/package/echarts-for-react-fc) -->
 <!-- [![Build Status](https://github.com/hustcc/echarts-for-react/workflows/build/badge.svg?branch=main)](https://github.com/hustcc/echarts-for-react/actions?query=workflow%3Abuild) -->
