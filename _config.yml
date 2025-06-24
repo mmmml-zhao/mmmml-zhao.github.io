@@ -17,6 +17,20 @@ discus-identifier: mr-brown # add your discus identifier
 
 # Build Settings
 markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  auto_ids: true
+  footnote_nr: 1
+  entity_output: as_char
+  toc_levels: 1..6
+  smart_quotes: lsquo,rsquo,ldquo,rdquo
+  enable_coderay: false
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: false
+  math_engine: mathjax
 plugins:
   - jekyll-sitemap
   - jekyll-paginate
