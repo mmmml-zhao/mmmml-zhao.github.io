@@ -1,0 +1,103 @@
+---
+layout: main
+title: RAG（检索增强生成)
+date: 2025-07-07 17:57:30 +0800
+description: 使用RAG，让对话助手回答特定问题
+tags: [大模型,MCP,Chat,RAG]
+---
+
+## 前言
+接前一篇使用MCP协议编写对话工具（后文简称对话工具），当我们询问大模型一些内网的内容时，大模型没有接触过相关的内容，往往会开始胡编，输出错误的内容，这时候就需要使用RAG功能，将内网的一些文档提供大模型，用以生成真实的回答。 
+
+需要搞清楚RAG与LLM之间的关系。  
+整个流程可以分为索引部分与查询部分。  
+索引过程：文档 --> 分割成块 --> 嵌入模型 --> 向量 --> 存储到向量数据库。  
+查询过程：用户问题 --> 嵌入模型 --> 问题向量 --> 向量数据库（检索相似块） --> 检索到的相关文本块 （--> 重排名模型）
+最后将用户问题和检索到的文本块一起给LLM --> 生成回答 --> 返回给用户
+
+所以RAG部分的流程可以和LLM使用的流程完全分开，
+![RAG应用流程](../assets/img/2025-07-04/RAG应用流程.png)
+
+## 具体流程
+
+### 嵌入embedding模型的选择
+- deepseek-r1-7b
+- Qwen3-Embedding-4B:Q4_K_M
+
+当前本地使用ollama运行deepseek-r1-7b，开始先拿该模型作为嵌入模型使用，但是该模型不是专门用做于嵌入，在后面的检索相关文本块上，表现较差。后搜索到六月初发布的Qwen3-Embedding，在嵌入模型的排行榜上表现优异。该模型具有多种规格(0.6B/4B/8B)，因本地运行内存只有16GB，后通过ollama下载第三方上传的Qwen3-Embedding-4B:Q4_K_M。  
+
+#### 重排名reranker模型
+在介绍Qwen3-Embedding的网页上，往往嵌入模型与重排名模型会一起讨论。  
+在查询过程最后一步，检索到相关文本块后还能再加一步，对文本块与query之间的关联性进行排行，最后可以取相关性（0-1）大于指定值的文本块发给LLM。   
+这里选用了 Qwen3-Reranker-4B:Q4_K_M。
+
+### 导入文档
+在对话工具的前端页面提供一个输入，键入本地地址，通过websocket发送到mcp服务，后端根据本地地址读取本机的文件，利用嵌入模型量化数据并存入向量数据库。
+
+### 对话调用
+当用户在前端发送信息传到MCP服务，调用LLM接口前，先调用嵌入模型，将问题量化，再在向量数据库内检索相似的文本返回，并构建新的prompt，插入到对话队列的前端，再将对话队列发送给LLM。新prompt类似下方。
+
+```javascript
+// 创建系统消息，包含检索到的文档信息
+const systemMessage = {
+    role: 'system',
+    content: `你是一个智能助手，拥有访问知识库的能力。以下是与你问题相关的文档信息：
+
+${ragResult.relevantDocuments.map((doc, index) =>
+        `文档 ${index + 1} (来源: ${doc.metadata.filename}):
+${doc.content}`
+    ).join('\n\n')}
+
+请基于这些文档信息回答用户问题。如果文档中没有相关信息，请基于你的知识回答，并说明信息来源。`
+};
+```
+
+## 遇到的注意点
+1. LLM模型也会提供量化功能，但效果较差。
+2. 要考虑嵌入模型和重排序模型的尺寸，运行内存是否能跑得动。这边重排序模型跑起来就挺卡的。  
+3. ollama并不官方支持rerank模型，所以需要改造generate接口，自定义返回`format`与`raw`设置为true。
+    ```javascript
+    const response = await fetch(`${this.config.baseUrl}/api/generate`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            model: this.config.model,
+            prompt: prompt,
+            stream: true,
+            raw: true,
+            options: {
+                temperature: this.config.temperature
+            },
+            format: {
+                type: "object",
+                properties: {
+                    query: {
+                        type: "string",
+                    },
+                    results: {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "number"
+                                },
+                                "score": {
+                                    "type": "number"
+                                },
+                                "reason": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    });
+    ```
+
+## 系统架构图
+![系统架构图](../assets/img/2025-07-04/系统架构图.png)
