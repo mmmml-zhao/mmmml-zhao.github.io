@@ -2,15 +2,15 @@
 <html lang="zh-CN">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>终端问答</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>终端播放</title>
     <style>
         body {
             margin: 0;
             background: #2d2d2d;
             color: #eee;
-            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+            font-family: "Fira Mono", "Consolas", "Menlo", monospace;
             display: flex;
             flex-direction: column;
             height: 100vh;
@@ -27,28 +27,19 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            transition: all 0.5s ease;
-            min-height: 0;
-        }
-
-        .terminal-container.expanded {
-            flex: 1.5;
-            margin-bottom: 0;
         }
 
         .terminal-header {
-            background: #2d2d2d;
-            border-bottom: 1px solid #333;
-            padding: 8px 16px;
+            background: #333;
+            padding: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            flex-shrink: 0;
+            justify-content: space-between;
         }
 
         .terminal-buttons {
             display: flex;
-            gap: 6px;
+            gap: 8px;
         }
 
         .terminal-button {
@@ -56,10 +47,11 @@
             height: 12px;
             border-radius: 50%;
             border: none;
+            cursor: pointer;
         }
 
         .terminal-button.close {
-            background: #ff5f56;
+            background: #ff5f57;
         }
 
         .terminal-button.minimize {
@@ -67,50 +59,42 @@
         }
 
         .terminal-button.maximize {
-            background: #27ca3f;
+            background: #28ca42;
         }
 
         .terminal-title {
-            color: #999;
+            color: #bbb;
             font-size: 12px;
-            margin-left: 16px;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .terminal {
             background: #1e1e1e;
-            padding: 16px;
-            flex: 1;
-            overflow-y: auto;
+            color: #eee;
+            padding: 20px;
             font-size: 14px;
-            line-height: 1.4;
-            position: relative;
-            min-height: 0;
-        }
-
-        .terminal-line {
-            margin: 0;
-            padding: 0;
+            line-height: 1.6;
+            overflow-y: auto;
+            flex: 1;
             white-space: pre-wrap;
             word-wrap: break-word;
         }
 
-        .slogan {
-            font-size: 8px;
+        .terminal-line {
+            margin-bottom: 8px;
         }
 
         .terminal-prompt {
-            color: #0f0;
-            display: inline;
-            font-size: 14px;
+            color: #4caf50;
+            font-weight: bold;
         }
 
         .terminal-cursor {
-            display: inline-block;
-            width: 8px;
-            height: 16px;
-            background: #0f0;
+            background: #eee;
+            color: #1e1e1e;
             animation: blink 1s infinite;
-            margin-left: 2px;
         }
 
         @keyframes blink {
@@ -126,80 +110,64 @@
             }
         }
 
-        .buttons {
-            display: flex;
-            justify-content: center;
-            gap: 32px;
-            padding: 24px 0;
-            background: #2d2d2d;
-            transition: all 0.5s ease;
-            flex-shrink: 0;
-            margin-bottom: 0;
+        .title-text {
+            color: #ffd700;
+            font-weight: bold;
         }
 
-        .buttons.hidden {
-            opacity: 0;
-            transform: translateY(20px);
-            pointer-events: none;
-            height: 0;
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
+        .plot-text {
+            color: #87ceeb;
         }
 
-        .btn {
-            background: #333;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            font-size: 1.2em;
-            padding: 16px 40px;
-            cursor: pointer;
-            transition: background 0.2s;
+        .english-text {
+            color: #ffa500;
         }
 
-        .btn:active {
-            background: #555;
+        .chinese-text {
+            color: #98fb98;
         }
 
         .ascii-block {
+            font-family: "Fira Mono", "Consolas", "Menlo", monospace;
+            color: #eee;
             white-space: pre;
-            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-            text-align: center;
-            margin: 16px 0;
-            font-size: 10px;
-            color: #0f0;
-            line-height: 1.2;
-            transform: scale(0.75);
+            margin: 20px 0;
+            font-size: 8px;
         }
 
-        .band-block {
+        .slogan {
+            color: #ffd700;
+            font-size: 16px;
             white-space: pre;
-            font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
-            text-align: center;
-            margin: 16px 0;
-            font-size: 12px;
-            color: #0ff;
-            line-height: 1.2;
-            transform: scale(0.75);
+            margin: 20px 0;
         }
 
-        /* 自定义滚动条 */
-        .terminal::-webkit-scrollbar {
-            width: 8px;
+        .buttons {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            gap: 20px;
         }
 
-        .terminal::-webkit-scrollbar-track {
-            background: #1e1e1e;
+        .btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: inherit;
+            transition: background 0.3s;
         }
 
-        .terminal::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
+        .btn:hover {
+            background: #45a049;
         }
 
-        .terminal::-webkit-scrollbar-thumb:hover {
-            background: #555;
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -212,330 +180,156 @@
                 <button class="terminal-button minimize"></button>
                 <button class="terminal-button maximize"></button>
             </div>
-            <div class="terminal-title">终端问答 — zsh</div>
+            <div class="terminal-title">终端播放 — zsh</div>
         </div>
-        <div class="terminal" id="terminal">
-            <div class="terminal-line">
-                <span class="terminal-prompt">$</span>
-                <span class="terminal-cursor"></span>
-            </div>
-        </div>
+        <div class="terminal" id="terminal"></div>
     </div>
     <div class="buttons" id="buttons">
-        <button class="btn back" id="backBtn">← Go Back</button>
-        <button class="btn" id="yesBtn">YES</button>
-        <button class="btn" id="noBtn">NO</button>
+        <button class="btn" id="nextBtn">下一句</button>
+        <button class="btn" id="speedUpBtn">加速</button>
+        <button class="btn" id="speedDownBtn">减速</button>
+        <button class="btn" id="outputAllBtn">一键输出所有文本</button>
+        <button class="btn" id="toggleLangBtn">Switch Language</button>
     </div>
     <script>
-        // 问题列表JSON
-        const questionList = [
-            {
-                "id": 1,
-                "text": "在西岸的余晖下，你最享受的是什么：",
-                "options": [
-                    {
-                        "text": "一起安静的坐在草坪上，看着天色渐暗",
-                        "next": 2,
-                    },
-                    {
-                        "text": "沿着江边漫步，随意的聊上几句",
-                        "next": 3
-                    }
-                ],      
-                "defaultExport": ''
-            },
-            {
-                "id": 2,
-                "text": "",
-                "options": [
-                    {
-                        "text": "片刻温暖的休憩",
-                        "next": 4
-                    },
-                    {
-                        "text": "未曾预料的悸动",
-                        "next": 5
-                    }
-                ]
-            },
-            {
-                "id": 3,
-                "text": "那些深夜的36问游戏，如同探索彼此的迷宫。你更享受其中的：",
-                "options": [
-                    {
-                        "text": "发现未知角落的惊喜",
-                        "next": 6
-                    },
-                    {
-                        "text": "共享秘密通道的亲密",
-                        "next": 7
-                    }
-                ]
-            },
-            {
-                "id": 4,
-                "text": "病中那句'记得晒太阳'的叮咛，在你心中更像是：",
-                "options": [
-                    {
-                        "text": "朋友间的自然关怀",
-                        "next": 8
-                    },
-                    {
-                        "text": "心门微启的光亮",
-                        "next": 9
-                    }
-                ]
-            },
-            {
-                "id": 5,
-                "text": "水波蛋的承诺，那个'吼'的回应，像是：",
-                "options": [
-                    {
-                        "text": "对美食邀约的俏皮应答",
-                        "next": 10
-                    },
-                    {
-                        "text": "对共同未来的朦胧期待",
-                        "next": 11
-                    }
-                ]
-            },
-            {
-                "id": 6,
-                "text": "在两个月的时光河流中，我们的相处更像：",
-                "options": [
-                    {
-                        "text": "静静交汇的支流",
-                        "next": 8
-                    },
-                    {
-                        "text": "逐渐融合的水域",
-                        "next": 11
-                    }
-                ]
-            },
-            {
-                "id": 7,
-                "text": "考试期间的沉默，在你看来是：",
-                "options": [
-                    {
-                        "text": "必要的专注空间",
-                        "next": 12
-                    },
-                    {
-                        "text": "值得跨越的距离",
-                        "next": 11
-                    }
-                ]
-            },
-            {
-                "id": 8,
-                "text": "那些未发送的早安晚安，如同：",
-                "options": [
-                    {
-                        "text": "林间未落下的露珠",
-                        "next": "A"
-                    },
-                    {
-                        "text": "等待启封的信笺",
-                        "next": "B"
-                    }
-                ]
-            },
-            {
-                "id": 9,
-                "text": "完美主义的小提琴等待，与我们的关系相比：",
-                "options": [
-                    {
-                        "text": "是相似的谨慎旋律",
-                        "next": "C"
-                    },
-                    {
-                        "text": "正谱写不同的乐章",
-                        "next": "D"
-                    }
-                ]
-            },
-            {
-                "id": 10,
-                "text": "散步时的'心动'告白，余音在你心中：",
-                "options": [
-                    {
-                        "text": "如微风拂过即散",
-                        "next": "A"
-                    },
-                    {
-                        "text": "似钟声持续回荡",
-                        "next": "D"
-                    }
-                ]
-            },
-            {
-                "id": 11,
-                "text": "完成与完美之间，我们的故事更倾向：",
-                "options": [
-                    {
-                        "text": "等待完美开篇的序章",
-                        "next": "C"
-                    },
-                    {
-                        "text": "勇敢落笔的进行篇章",
-                        "next": "D"
-                    }
-                ]
-            },
-            {
-                "id": 12,
-                "text": "如果为这段旅程选个色调，会是：",
-                "options": [
-                    {
-                        "text": "晨曦的淡金与雾蓝",
-                        "next": "A"
-                    },
-                    {
-                        "text": "暮色中的暖橙与玫红",
-                        "next": "D"
-                    }
-                ]
-            }
-        ]
-
-
-        // 结束语映射
-        const endMessages = {
-            "A": "我愿做那耐心的园丁，守候你绽放的时节",
-            "B": "你无意洒落的阳光，已在我心田生根",
-            "C": "在完美主义的琴弦上，我愿与你合奏即兴的旋律",
-            "D": "当你说出心动的那一刻，我们的故事已悄然启程"
-        };
-
-        let currentQuestionId = 1;
+            let dataList = [
+                {
+                    "type": "plot",
+                    "episode": "S01E01",
+                    "title": "酒吧初遇",
+                    "plot": "Ted在MacLaren's酒吧对刚搬到纽约的Robin一见钟情，主动搭讪并阐述命运观"
+                },
+                {
+                    "type": "chat",
+                    "dialogues": [
+                        {
+                            "en": "Ted: You know what? Destiny is not the path we take. It's what happens when we're on that path.",
+                            "zh": "Ted：命运不是我们选择的道路，而是踏上道路后发生的事。"
+                        },
+                        {
+                            "en": "Robin: That's... actually profound. For a guy holding a beer and wearing red cowboy boots.",
+                            "zh": "Robin：这...挺深刻的，尤其出自一个拿啤酒穿红牛仔靴的男人。"
+                        }
+                    ]
+                },
+                {
+                    "type": "plot",
+                    "episode": "S01E02",
+                    "title": "约会灾难",
+                    "plot": "Ted策划浪漫约会，因紧张过早说出\"I love you\"吓坏Robin"
+                },
+                {
+                    "type": "chat",
+                    "dialogues": [
+                        {
+                            "en": "Robin: You can't just say \"I love you\" on the first date! That's like putting a whole firework factory in your mouth!",
+                            "zh": "Robin：第一次约会不能说\"我爱你\"！这就像把整个烟花工厂塞进嘴里！"
+                        },
+                        {
+                            "en": "Ted: But it's how I felt! When you know, you know.",
+                            "zh": "Ted：但这是我的真实感受！当你遇到对的人，你就会明白。"
+                        }
+                    ]
+                },
+                {
+                    "type": "plot",
+                    "episode": "S01E07",
+                    "title": "屋顶谈心",
+                    "plot": "两人在屋顶喝酒，Robin首次透露不想要婚姻和孩子的人生观"
+                },
+                {
+                    "type": "chat",
+                    "dialogues": [
+                        {
+                            "en": "Robin: I don't want a white picket fence or 2.5 kids. I want to travel the world with my dogs.",
+                            "zh": "Robin：我不想要白篱笆或2.5个孩子，我想带着狗环游世界。"
+                        },
+                        {
+                            "en": "Ted: But what if you meet someone who makes you want those things?",
+                            "zh": "Ted：如果遇到让你想要这些的人呢？"
+                        }
+                    ]
+                },
+                {
+                    "type": "plot",
+                    "episode": "S01E12",
+                    "title": "雨中告白",
+                    "plot": "Ted举蓝色法国号在Robin公寓楼下站岗，用\"求雨\"证明真心"
+                },
+                {
+                    "type": "chat",
+                    "dialogues": [
+                        {
+                            "en": "Ted: I had to do something big! Something that couldn't be ignored. Like... making it rain!",
+                            "zh": "Ted：我必须做些无法被忽视的事...比如让天下雨！"
+                        },
+                        {
+                            "en": "Robin: You're insane... and incredibly sweet.",
+                            "zh": "Robin：你疯了...但也甜得要命。"
+                        }
+                    ]
+                },
+                {
+                    "type": "plot",
+                    "episode": "S01E22",
+                    "title": "舞会定情",
+                    "plot": "在高中毕业舞会当志愿者，Robin首次承认Ted可能是真命天子"
+                },
+                {
+                    "type": "chat",
+                    "dialogues": [
+                        {
+                            "en": "Robin: You were right about us. What if you're my lobster?",
+                            "zh": "Robin：你说得对。万一你是我的真命天子呢？"
+                        },
+                        {
+                            "en": "Ted: Then we'll grow old together in a tank at the bottom of the ocean.",
+                            "zh": "Ted：那我们就一起在海底水箱里慢慢变老。"
+                        }
+                    ]
+                },
+                {
+                    "type": "plot",
+                    "episode": "S01E22",
+                    "title": "求雨舞的奇迹",
+                    "plot": "Ted向Lily索要Robin公寓钥匙，雇佣蓝色乐器乐队在Robin家中等待示爱。Robin因性格差异犹豫不决，Ted提议同赴巴黎却被其工作露营计划拒绝，两人争吵后Ted失落离开"
+                },
+                {
+                    "type": "plot",
+                    "episode": "S01E22",
+                    "title": "求雨舞的执着",
+                    "plot": "Ted为阻止Robin露营，通过Barney找到美国土著文化学生学习求雨舞。Ted在暴雨中起舞后奇迹般成功求雨"
+                },
+                {
+                    "type": "plot",
+                    "episode": "S01E22",
+                    "title": "暴雨中的转折",
+                    "plot": "Ted冒雨冲至Robin公寓，两人关系迎来突破性进展。"
+                }
+            ]
+            let isTyping = false;
+            let currentText = "";
+            let currentDisplayText = "";
+            let currentCharIndex = 0;
+            let typingInterval = null;
+            let currentItemIndex = 0;
+            let currentSentenceIndex = 0;
         let finished = false;
+            let currentDialogueIndex = 0; // 新增：对话数组下标
+            let typingSpeed = 100; // ms/char，初始0.1秒/字
+            let currentLanguage = 'en'; // 当前语言：'zh' 中文, 'en' 英文
 
-        function printToTerminal(text) {
-            const terminal = document.getElementById('terminal');
-
-            // 移除最后一个光标行
-            const lastLine = terminal.lastElementChild;
-            if (lastLine && lastLine.querySelector('.terminal-cursor')) {
-                terminal.removeChild(lastLine);
-            }
-
-            // 添加新内容
-            const line = document.createElement('div');
-            line.className = 'terminal-line';
-            line.innerHTML = `<span class="terminal-prompt">$</span> ${text}`;
-            terminal.appendChild(line);
-
-            // 添加新的光标行
-            const cursorLine = document.createElement('div');
-            cursorLine.className = 'terminal-line';
-            cursorLine.innerHTML = '<span class="terminal-prompt">$</span><span class="terminal-cursor"></span>';
-            terminal.appendChild(cursorLine);
-
-            terminal.scrollTop = terminal.scrollHeight;
-        }
-
-        let historyStack = [];
-
-        function getQuestionById(id) {
-            return questionList.find(q => q.id === id);
-        }
-
-        function showQuestion(questionId, isBack = false) {
-            if (!isBack && currentQuestionId) {
-                historyStack.push(currentQuestionId);
-            }
-
-            if (typeof questionId === 'string' && endMessages[questionId]) {
-                printToTerminal(endMessages[questionId]);
-                finished = true;
-                setTimeout(() => { hideButtonsAndExpandTerminal(); }, 1000);
-                setTimeout(showAsciiArt, 500);
-                return;
-            }
-
-            const question = getQuestionById(questionId);
-            if (question) {
-                printToTerminal(question.text);
-                currentQuestionId = questionId;
-                updateBackBtn();
-                updateButtonText();
-            }
-        }
-
-        function updateBackBtn() {
-            const backBtn = document.getElementById('backBtn');
-            backBtn.disabled = historyStack.length === 0;
-        }
-
-        document.getElementById('backBtn').onclick = () => {
-            if (historyStack.length > 0 && !finished) {
-                const prev = historyStack.pop();
-                printToTerminal('← 返回上一个问题');
-                showQuestion(prev, true);
-            }
-        };
-
-        function hideButtonsAndExpandTerminal() {
-            const buttons = document.getElementById('buttons');
-            const terminalContainer = document.getElementById('terminalContainer');
-
-            // 隐藏按钮
-            buttons.classList.add('hidden');
-
-            // 扩展终端高度
-            terminalContainer.classList.add('expanded');
-
-            // 强制重新计算布局
-            setTimeout(() => {
-                terminalContainer.style.height = 'calc(100vh - 40px)';
-            }, 100);
-        }
-
-        function handleAnswer(option) {
-            if (finished) return;
-
-            const currentQuestion = getQuestionById(currentQuestionId);
-            if (!currentQuestion) return;
-
-            // 显示用户的选择
-            const answerText = option === 'A' ? currentQuestion.options[0].text : currentQuestion.options[1].text;
-            printToTerminal(`用户选择: ${answerText}`);
-
-            // 根据选择跳转到下一个问题
-            const nextQuestionId = option === 'A' ? currentQuestion.options[0].next : currentQuestion.options[1].next;
-            showQuestion(nextQuestionId);
-        }
-
-        document.getElementById('yesBtn').onclick = () => handleAnswer('A');
-        document.getElementById('noBtn').onclick = () => handleAnswer('B');
-
-        // 更新按钮文本的函数
-        function updateButtonText() {
-            const currentQuestion = getQuestionById(currentQuestionId);
-            if (currentQuestion) {
-                document.getElementById('yesBtn').textContent = currentQuestion.options[0].text;
-                document.getElementById('noBtn').textContent = currentQuestion.options[1].text;
-            }
-        }
-
-        // 初始问题
-        showQuestion(currentQuestionId);
-        updateButtonText();
-
-        // rightHere.jpg 的真实字符图
+            // 照片字符图
         const asciiArt = `▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▆▆▆▆▅▃▅▅▄▃▂▃▄▄▃▃▃▃▃▃▃▃▂▂▂▂▂▂▃▃▃▃▃▄▅▄▄▄▄▃▃▃▃▃▄▄▄▄▄▄▄▄▄▄▄▄▃▂▂▃▃▅▅▅▆▆▆▆▆▅▅▅▅▅▅
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▅▅▅▃▃▄▄▃▃▃▃▃▃▃▃▃▃▂▂▂▂▂▂▃▃▂▂▃▄▄▄▄▄▃▃▃▃▃▄▄▄▄▅▅▅▄▄▄▄▃▃▃▃▄▅▄▇▇▆▆▆▆▆▆▆▆▆▆▆
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▅▅▅▄▄▃▄▄▄▃▂▂▂▂▂▂▂▂▃▂▂▃▂▂▂▂▂▃▃▃▂▂▃▄▄▄▄▄▄▃▃▄▄▄▄▄▄▅▅▅▄▃▃▃▃▅▆▅▇▇▆▆▆▆▆▆▆▆▆▆▆
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▅▅▅▄▄▃▅▃▃▂▂▃▃▃▃▃▄▄▄▄▄▄▄▄▄▃▃▃▄▄▄▄▄▄▄▄▅▅▅▅▅▆▆▅▅▅▅▅▅▄▄▄▄▄▅▇▆▇▇▆▆▆▆▆▆▆▆▆▆▆▆
-▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▄▄▄▃▃▅▃▂▃▂▃▃▃▃▃▃▄▄▄▅▅▅▅▅▅▅▅▅▅▅▅▅▆▆▆▆▅▅▆▆▆▆▆▆▆▆▆▆▆▅▄▅▅▄▅▆▆▆▇▇▇▆▆▆▆▆▆▆▆▆▆▆
-▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▄▃▃▃▅▄▃▂▃▃▃▄▃▃▃▃▄▄▅▅▅▅▅▅▅▅▅▅▅▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▄▅▆▆▆▆▆▆▇▇▇▆▆▆▆▆▆▆▆▆▆▆
+▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▄▄▄▃▃▅▃▂▃▂▃▃▃▃▃▃▄▄▄▅▅▅▅▅▅▅▅▅▅▅▅▅▆▆▆▆▅▅▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▄▅▆▆▆▆▆▆▇▇▇▆▆▆▆▆▆▆▆▆▆▆
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▇▆▅▄▃▄▅▄▃▃▃▄▄▄▃▃▃▃▃▃▄▅▅▅▅▅▅▅▅▅▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▅▆▆▆▆▇▆▇▆▆▇▆▆▆▆▆▆▆▆▆▆
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▇▅▃▃▃▄▄▄▄▃▄▄▅▄▃▃▃▃▃▃▄▄▄▅▅▅▅▅▅▅▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▆▆▆▆▆▆▆▆▆▇▆▇▇▆▆▆▆▆▆▆▆
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▇▆▃▃▃▄▄▄▃▄▅▅▅▄▄▃▃▃▃▃▃▄▄▅▅▅▅▅▅▅▅▅▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▅▅▅▅▅▅▆▅▆▇▇▇▇▆▆▆▆▆▆▆▆
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▇▅▂▃▃▄▄▃▄▅▆▆▆▅▅▄▄▄▄▄▃▄▄▅▅▅▅▅▅▅▆▅▅▅▅▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▄▅▅▄▅▅▅▅▇▇▇▇▇▇▇▇▆▆▆▆▆
-▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▇▇▆▇▆▃▂▂▃▅▅▅▆▆▆▆▆▅▅▄▄▄▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▅▅▅▅▅▅▆▇▇▇▇▇▇▇▇▇▇▆▆▆
+▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▇▇▆▇▆▃▂▂▃▅▅▅▆▆▆▆▆▅▅▄▄▄▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▅▅▅▅▅▅▅▅▆▇▇▇▇▇▇▇▇▇▇▆▆▆
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▇▇▇▇▆▂▂▂▃▅▆▆▆▆▆▅▄▃▃▂▂▂▃▃▄▄▅▅▅▅▅▆▆▆▅▅▅▆▆▆▆▆▆▆▆▆▆▆▅▅▆▆▇▇▇▆▆▅▅▅▅▅▅▅▆▇▇▇▇▇▇▇▇▇▇▇▇▇▇
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▇▇▇▇▇▇▇▇▇▆▃▂ ▃▅▇▆▅▅▄▃▂▂▂▂▂▂▂▂▂▂▃▃▄▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▅▆▇▇▇▇▆▆▆▅▅▅▆▆▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
 ▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▆▇▇▇▇▇▇▇▇▇▇▆▄▂▂▄▆▆▅▃▂▂▂▂▂▂▃▂▂▂▂▂▂▂▂▃▃▄▄▄▅▅▅▅▅▅▅▅▄▄▄▄▄▅▅▅▆▆▆▇▇▆▆▆▆▅▅▅▆▆▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
@@ -563,105 +357,134 @@
 ▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▃▃▃▃▃▂▂▂▂▂▂▃▃▃▃▄▅▆▅▃▃▃▄▅▅▅▄▄▄▄▅▅▅▅▆▆▇▅▂ ▂        ▂         ▄▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
 ▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▃▃▃▃▃▃▂ ▂▂▂▂▂▂▃▃▃▃▄▄▄▃▂▂▃▄▅▅▆▅▃▃▄▄▅▅▄▃▂▂▂      ▂▂            ▅▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
 ▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▃▃▃▂       ▂▂▂▃▂▃▃▃▂  ▂▂▃▃▃▃▄▄▄▅▅▃▂▂▂▃▃▂ ▂▂ ▂▂▂▃▂    ▂▃▂   ▃▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
-▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▃▃▂          ▂▂▃▃▂▂▂  ▂▂▂▂▂▂▃▃▃▂▂▂▂▂▂▂▂▂    ▂▃▃▄▄▂    ▂▄▄▂  ▆▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
-▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▂              ▂▂▃▃▃▃▄▄▃   ▂▂▂▂▂▂▂▂▂▂▂▂▂▂   ▂▃▃▃▄▃▂▂   ▂▄▅▄▄▅▅▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
-▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂            ▂▂▂▂▂▂▂▂▃▃▃▂ ▂▂▂  ▂▃▃▂▂▂▂▂▂▂▂   ▂▃▃▃▃▃▄▂    ▂▄▅▄▄▅▅▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
-▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂              ▂▂▂▂▂▂▂▂▂▂▂▂▂▂     ▃▃▂▂▂▂▂▂▂▂  ▃▃▃▃▃▃▄▄▂▂   ▂▄▅▅▅▄▆▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▃▃▃▃▂              ▂▂▂▂▂▂▂▂▃▃▃▂ ▂▂▂  ▂▃▃▂▂▂▂▂▂▂▂   ▂▃▃▃▃▃▄▂    ▂▄▅▄▄▅▅▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
+▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂            ▂▂▂▂▂▂▂▂▃▃▃▂ ▂▂▂  ▃▃▂▂▂▂▂▂▂▂  ▃▃▃▃▃▃▄▄▂▂   ▂▄▅▅▅▄▆▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
  ▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▂▂                ▂  ▂▂▂▂▂▂▂▂▂     ▂▃▃▃▂▂▂▂▂▂▂  ▃▄▃▃▃▃▃▄▄▂▂  ▂▂▄▅▅▅▅▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
   ▂▂▂▂▂▂▂▂▂▂▂▂▃▃▂                    ▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂▃▃▃▃▂▂▂▂▂▂ ▂▄▄▃▃▃▃▃▃▄▂▂  ▂▂▄▅▅▅▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇
     ▂▂▂▂▂▂▂▂▃▃▂▂        ▂▂          ▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂▂▃▃▃▃▃▂▂▂▂▂  ▄▅▃▃▃▃▂▂▃▄▃▂  ▂▂▄▅▅▆▇▇▇▇▇▇▇▇▇▇▇▇
      ▂▂▂▂▂▂▃▂▂        ▂▂           ▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂▂▂▂▃▃▃▃▃▂▂▂▂▂ ▃▄▅▃▃▃▂▂▂▄▄▂   ▂▂▄▅▅▇▇▇▇▇▇▇▇▇▇▇▇▇▇
       ▂▂▂▂▃▂           ▂         ▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂▃▂▂▂▂▃▂▃▂▃▃▂▂▂▂▂ ▄▄▄▃▃▂▂▂▃▄▃▂   ▂▃▄▅▆▇▇▇▇▇▇▇▇▇▇▇
         ▂▃▂                      ▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂▂▃▃▂▂▂▂▂▂▂▂▃▃▂▂▂▂▂▃▄▄▄▃▃▂▂▂▃▄▃▂   ▂▃▅▅▆▇▇▇▇▇▇▇▇▇▇▇
-       ▂▂▂  ▂▂                  ▂▂▂▂▂▂▂▂▂▂▂▂▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▂▂▂▂▃▃▄▄▃▂▂▂▃▃▃▂▂  ▂▂▃▅▅▆▇▇▇▇▇▇▇▇▇▇▇
+       ▂▂▂  ▂▂                  ▂▂▂▂▂▂▂▂▂▂▂▂▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▃▂▂▂▂▃▃▄▄▃▂▂▂▃▃▃▂▂  ▂▂▃▅▅▆▇▇▇▇▇▇▇▇▇▇
      ▂▂ ▂▂ ▂▂▂▂▂               ▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂▂▂▂▂▂▂▂▂▃▂▂▂▂▂▂▃▄▃▂▂▃▃▃▄▅▃▂▂▂▂▃▃▃▂▂  ▂▂▃▅▆▇▇▇▇▇▇▇▇▇▇
     ▂▂ ▂▃▃▂▂ ▂▂               ▂▂▃▂▂▂▃▂▂▂▂▂▃▃▂▂▂▂▂▂▃▃▂▂▂▂▃▄▄▄▃▂▂▂▃▃▃▃▃▃▃▅▄▂▂▂▂▂▃▃▃▂   ▂▂▄▅▆▇▇▇▇▇▇▇▇▇▇
   ▂▃▂ ▃▇▄▄▇▃▃▃▂▃▃▃▂▃▂ ▃▂▂▃▃▂ ▂▂▅▆▂▂▄▆▂▃▃▃▃▄▃▄▂▄▄▃▂▆▅▂▂▂▂▆▆▄▇▄▃▄▄▃▃▄▄▄▄▃▅▇▃▂▂▂▂▂▂▃▃▂   ▂▂▅▆▇▇▇▇▇▇▇▇▇▇
  ▂▄▃  ▆▅▄▆▃▂▆▃▅▃▃▄▃▆▃▃▆▂▂▆▂▂▂▂▃▇▄▄▄▇▅▃▆▄▄▅▆▅▅▃▆▄▃▃▆▃▂▂▂▃▇▄▅▇▃▅▅▆▄▅▅▄▄▆▃▅▆▃▂▂▂▂▂▂▂▃▂▂  ▂▂▃▅▇▇▇▇▇▇▇▇▇▇
 ▂▃▃  ▂▅▂ ▄▄▄▅▂▅▃▄▄▃▄ ▃▄ ▃▄ ▂▂▂▄▅▂▂▂▅▂▄▅▄▃▅▃▄▄▄▅▄▃▄▄▂▂▂▂▄▆▄▅▅▃▅▃▅▃▄▅▅▅▄▃▅▄▄▂▂▂▂▂▂▂▃▃▂▂  ▂▂▃▆▇▇▇▇▇▇▇▇▇
 ▃▃▂       ▂▂▂▂▂▂▂      ▂  ▂▂▂▂▂▂▂▂▂▂▂▂▃▃▃▂▂▂▂▂▂▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▃▄▃▃▃▃▄▂▂▂▂▂▂▂▂▃▃▂   ▂▂▄▆▇▇▇▇▇▇▇▇
-▂▂▂▂▂      ▂▂▂▂▂▂▂▂▂  ▂  ▂▂▂▂▂▂▂▂▂▂▂▂▂▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂ ▂▂▃▂▂▂▂▂▃▃▂▂▂▃▂▂▂▂▂▂▂▂▃▃▂▂  ▂▂▃▅▇▇▇▇▇▇▇▇`
+▂▂▂▂▂      ▂▂▂▂▂▂▂▂▂  ▂  ▂▂▂▂▂▂▂▂▂▂▂▂▂▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂▂ ▂▂▃▂▂▂▂▂▃▃▂▂▂▃▂▂▂▂▂▂▂▂▃▃▂▂  ▂▂▃▅▇▇▇▇▇▇▇▇`;
 
-        function showAsciiArt() {
-            const terminal = document.getElementById('terminal');
-
-            // 移除最后一个光标行
-            const lastLine = terminal.lastElementChild;
-            if (lastLine && lastLine.querySelector('.terminal-cursor')) {
-                terminal.removeChild(lastLine);
-            }
-
-            const asciiLine = document.createElement('div');
-            asciiLine.className = 'ascii-block';
-            asciiLine.innerHTML = asciiArt;
-            terminal.appendChild(asciiLine);
-
-            // 添加新的光标行
-            const cursorLine = document.createElement('div');
-            cursorLine.className = 'terminal-line';
-            cursorLine.innerHTML = '<span class="terminal-prompt">$</span><span class="terminal-cursor"></span>';
-            terminal.appendChild(cursorLine);
-
-            terminal.scrollTop = terminal.scrollHeight;
-
-            // 2秒后隐藏字符图并显示文本
-            setTimeout(() => {
-                // 移除字符图
-                if (asciiLine && asciiLine.parentNode) {
-                    asciiLine.parentNode.removeChild(asciiLine);
-                }
-
-                // 显示文本
-                showTextMessage();
-            }, 2000);
-        }
-
+            // 文本字符图
         function showTextMessage() {
-            const terminal = document.getElementById('terminal');
-
+            const terminal = document.getElementById("terminal");
             // 移除最后一个光标行
             const lastLine = terminal.lastElementChild;
-            if (lastLine && lastLine.querySelector('.terminal-cursor')) {
+            if (lastLine && lastLine.querySelector(".terminal-cursor")) {
                 terminal.removeChild(lastLine);
             }
-
-            const textLine = document.createElement('div');
-            textLine.className = 'terminal-line slogan';
+            const textLine = document.createElement("div");
+            textLine.className = "terminal-line slogan";
             textLine.innerHTML = `<span class="terminal-prompt">$</span>  
-                                                                                      
-                                                                                      
-▄▖         ▜  ▌  ▌           ▗   ▜             
-▐   ▌▌▌▛▌▌▌▐ ▛▌  ▛▌▀▌▌▌█▌  ▛▘▜▘▛▌▐ █▌▛▌  ▌▌▛▌▌▌ 
-▟▖  ▚▚▘▙▌▙▌▐▖▙▌  ▌▌█▌▚▘▙▖  ▄▌▐▖▙▌▐▖▙▖▌▌  ▙▌▙▌▙▌
-                                         ▄▌                                           
-       ▌   ▜           ▌     ▗                                                                                            
-▀▌  ▌▌▌▛▌▛▌▐ █▌  ▛▌▛▘▛▘▛▌█▌▛▘▜▘▛▘▀▌                                    
-█▌  ▚▚▘▌▌▙▌▐▖▙▖  ▙▌▌ ▙▖▌▌▙▖▄▌▐▖▌ █▌▗      
 
+
+▄▖         ▜  ▌  ▌           ▗   ▜
+▐   ▌▌▌▛▌▌▌▐ ▛▌  ▛▌▀▌▌▌█▌  ▛▘▜▘▛▌▐ █▌▛▌  ▌▌▛▌▌▌
+▟▖  ▚▚▘▙▌▙▌▐▖▙▌  ▌▌█▌▚▘▙▖  ▄▌▐▖▙▌▐▖▙▖▌▌  ▙▌▙▌▙▌
+                                         ▄▌
+       ▌   ▜           ▌     ▗
+▀▌  ▌▌▌▛▌▛▌▐ █▌  ▛▌▛▘▛▘▛▌█▌▛▘▜▘▛▘▀▌
+█▌  ▚▚▘▌▌▙▌▐▖▙▖  ▙▌▌ ▙▖▌▌▙▖▄▌▐▖▌ █▌▗
 
 
 `;
             terminal.appendChild(textLine);
-
             // 添加新的光标行
-            const cursorLine = document.createElement('div');
-            cursorLine.className = 'terminal-line';
-            cursorLine.innerHTML = '<span class="terminal-prompt">$</span><span class="terminal-cursor"></span>';
+            const cursorLine = document.createElement("div");
+            cursorLine.className = "terminal-line";
+            cursorLine.innerHTML =
+                '<span class="terminal-prompt">$</span><span class="terminal-cursor"></span>';
             terminal.appendChild(cursorLine);
-
             terminal.scrollTop = terminal.scrollHeight;
 
-            // 3秒后隐藏文本并显示乐队动画
+            // 2秒后隐藏文本字符图并显示bandFrames动画
             setTimeout(() => {
-                // 移除文本
+                // 移除文本字符图
                 if (textLine && textLine.parentNode) {
                     textLine.parentNode.removeChild(textLine);
                 }
-
-                // 显示乐队动画
-                showBandBlock();
-            }, 3000);
+                // 移除光标行
+                if (cursorLine && cursorLine.parentNode) {
+                    cursorLine.parentNode.removeChild(cursorLine);
+                }
+                // 显示bandFrames动画
+                showBandFrames();
+            }, 2000);
         }
+
+
+            // 乐队动态字符图动画
+            let bandFrameIdx = 0;
+            let bandInterval = null;
+            let bandLine = null;
+            function showBandFrames() {
+                const terminal = document.getElementById("terminal");
+                // 移除最后一个光标行
+                const lastLine = terminal.lastElementChild;
+                if (lastLine && lastLine.querySelector(".terminal-cursor")) {
+                    terminal.removeChild(lastLine);
+                }
+                bandLine = document.createElement("div");
+                bandLine.className = "ascii-block";
+                bandLine.textContent = bandFrames[0];
+                terminal.appendChild(bandLine);
+                // 添加新的光标行
+                const cursorLine = document.createElement("div");
+                cursorLine.className = "terminal-line";
+                cursorLine.innerHTML = '<span class="terminal-prompt">$</span><span class="terminal-cursor"></span>';
+                terminal.appendChild(cursorLine);
+                terminal.scrollTop = terminal.scrollHeight;
+                // 启动动画
+                bandFrameIdx = 0;
+                if (bandInterval) {
+                    clearInterval(bandInterval);
+                }
+                bandInterval = setInterval(() => {
+                    if (bandLine) {
+                        bandLine.textContent = bandFrames[bandFrameIdx % bandFrames.length];
+                        bandFrameIdx++;
+                    }
+                }, 500);
+            }
+
+            // 显示照片字符图
+            function showAsciiArt() {
+                const terminal = document.getElementById("terminal");
+                // 移除最后一个光标行
+                const lastLine = terminal.lastElementChild;
+                if (lastLine && lastLine.querySelector(".terminal-cursor")) {
+                    terminal.removeChild(lastLine);
+                }
+                const asciiLine = document.createElement("div");
+                asciiLine.className = "ascii-block";
+                asciiLine.innerHTML = asciiArt;
+                terminal.appendChild(asciiLine);
+                // 添加新的光标行
+                const cursorLine = document.createElement("div");
+                cursorLine.className = "terminal-line";
+                cursorLine.innerHTML =
+                    '<span class="terminal-prompt">$</span><span class="terminal-cursor"></span>';
+                terminal.appendChild(cursorLine);
+                terminal.scrollTop = terminal.scrollHeight;
+                // 2秒后隐藏字符图并显示文本字符图
+                setTimeout(() => {
+                    if (asciiLine && asciiLine.parentNode) {
+                        asciiLine.parentNode.removeChild(asciiLine);
+                    }
+                    showTextMessage();
+                }, 2000);
+        }
+
+
 
         // 更大的乐队演奏动态字符图形
         const bandFrames = [
@@ -1434,44 +1257,293 @@
             `,
         ];
 
-        let bandFrameIdx = 0;
-        let bandInterval = null;
-        let bandLine = null;
-
-        function showBandBlock() {
-            const terminal = document.getElementById('terminal');
-
-            // 移除最后一个光标行
-            const lastLine = terminal.lastElementChild;
-            if (lastLine && lastLine.querySelector('.terminal-cursor')) {
-                terminal.removeChild(lastLine);
-            }
-
-            bandLine = document.createElement('div');
-            bandLine.className = 'band-block';
-            bandLine.textContent = bandFrames[0];
-            terminal.appendChild(bandLine);
-
-            // 添加新的光标行
-            const cursorLine = document.createElement('div');
-            cursorLine.className = 'terminal-line';
-            cursorLine.innerHTML = '<span class="terminal-prompt">$</span><span class="terminal-cursor"></span>';
-            terminal.appendChild(cursorLine);
-
-            terminal.scrollTop = terminal.scrollHeight;
-
-            // 启动动画
-            bandFrameIdx = 0;
-            if (bandInterval) {
-                clearInterval(bandInterval);
-            }
-            bandInterval = setInterval(() => {
-                if (bandLine) {
-                    bandLine.textContent = bandFrames[bandFrameIdx % bandFrames.length];
-                    bandFrameIdx++;
+            // 打印到终端
+            function printToTerminal(text, className = "") {
+                const terminal = document.getElementById("terminal");
+                const newLine = document.createElement("div");
+                newLine.className = "terminal-line";
+                if (className) {
+                    newLine.classList.add(className);
                 }
-            }, 500);
+                newLine.innerHTML = '<span class="terminal-prompt">$ </span>' + text;
+                terminal.appendChild(newLine);
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+
+            // 打字机效果
+            function startTyping(text, className = "", callback) {
+                if (isTyping) return;
+                isTyping = true;
+                currentText = text;
+                currentDisplayText = "";
+                currentCharIndex = 0;
+                const terminal = document.getElementById("terminal");
+                const newLine = document.createElement("div");
+                newLine.className = "terminal-line";
+                if (className) {
+                    newLine.classList.add(className);
+                }
+                newLine.id = "current-typing-line";
+                newLine.innerHTML = '<span class="terminal-prompt">$ </span>';
+                terminal.appendChild(newLine);
+                function typeChar() {
+                    if (currentCharIndex < currentText.length) {
+                        currentDisplayText += currentText[currentCharIndex];
+                        document.getElementById("current-typing-line").innerHTML =
+                            '<span class="terminal-prompt">$ </span>' + currentDisplayText;
+                        currentCharIndex++;
+                        terminal.scrollTop = terminal.scrollHeight;
+                        typingInterval = setTimeout(typeChar, typingSpeed);
+                    } else {
+                        isTyping = false;
+                        document
+                            .getElementById("current-typing-line")
+                            .removeAttribute("id");
+                        setTimeout(() => {
+                            if (callback) callback();
+                            else nextSentence();
+                        }, 500);
+                    }
+                }
+                typeChar();
+            }
+
+            // 完成当前句子的打字
+            function finishCurrentTyping() {
+                if (isTyping) {
+                    if (typingInterval) clearTimeout(typingInterval);
+                    currentDisplayText = currentText;
+                    document.getElementById("current-typing-line").innerHTML =
+                        '<span class="terminal-prompt">$ </span>' + currentDisplayText;
+                    document.getElementById("current-typing-line").removeAttribute("id");
+                    isTyping = false;
+                    document.getElementById("terminal").scrollTop =
+                        document.getElementById("terminal").scrollHeight;
+                    setTimeout(() => {
+                        nextSentence();
+                    }, 500);
+                }
+            }
+
+            // 下一句
+            function nextSentence() {
+                if (finished) return;
+                if (isTyping) {
+                    finishCurrentTyping();
+                    return;
+                }
+                if (currentItemIndex >= dataList.length) {
+                    finished = true;
+                    printToTerminal("--- 播放完毕 ---");
+                    setTimeout(() => {
+                        showAsciiArt();
+                    }, 1000);
+                    document.getElementById("nextBtn").disabled = true;
+                    document.getElementById("speedUpBtn").disabled = true;
+                    document.getElementById("speedDownBtn").disabled = true;
+                    return;
+                }
+                const item = dataList[currentItemIndex];
+                if (item.type === "plot") {
+                    currentDialogueIndex = 0;
+                // 跳过title，直接显示plot
+                startTyping(item.plot, "plot-text");
+                currentItemIndex++;
+                currentSentenceIndex = 0;
+            } else if (item.type === "chat") {
+                const dialogues = item.dialogues || [];
+                if (dialogues.length === 0) {
+                    currentItemIndex++;
+                    currentSentenceIndex = 0;
+                    nextSentence();
+                    return;
+                }
+                if (currentDialogueIndex >= dialogues.length) {
+                    currentItemIndex++;
+                    currentSentenceIndex = 0;
+                    currentDialogueIndex = 0;
+                    nextSentence();
+                    return;
+                }
+                const dialogue = dialogues[currentDialogueIndex];
+                // 根据当前语言设置显示内容
+                const text = currentLanguage === 'zh' ? dialogue.zh : dialogue.en;
+                const className = currentLanguage === 'zh' ? "chinese-text" : "english-text";
+                startTyping(text, className);
+                currentDialogueIndex++;
+            }
         }
+
+            // 开始播放
+            function startPlaying() {
+                if (dataList.length === 0) {
+                    printToTerminal("没有数据可播放");
+                    return;
+            }
+            printToTerminal("开始播放内容...");
+            setTimeout(() => {
+                nextSentence();
+            }, 1000);
+        }
+
+            // 重新显示所有已输出的内容
+            function refreshAllContent() {
+                const terminal = document.getElementById("terminal");
+                // 清空终端
+                terminal.innerHTML = '';
+
+                // 重新添加开始提示
+                printToTerminal("开始播放内容...");
+
+                // 重新显示所有已播放的内容
+                let tempItemIndex = 0;
+                let tempDialogueIndex = 0;
+
+                while (tempItemIndex < currentItemIndex) {
+                    const item = dataList[tempItemIndex];
+                    if (item.type === "plot") {
+                        printToTerminal(item.plot, "plot-text");
+                        tempItemIndex++;
+                        tempDialogueIndex = 0;
+                    } else if (item.type === "chat") {
+                        const dialogues = item.dialogues || [];
+                        if (tempDialogueIndex >= dialogues.length) {
+                            tempItemIndex++;
+                            tempDialogueIndex = 0;
+                            continue;
+                        }
+                        const dialogue = dialogues[tempDialogueIndex];
+                        const text = currentLanguage === 'zh' ? dialogue.zh : dialogue.en;
+                        const className = currentLanguage === 'zh' ? "chinese-text" : "english-text";
+                        printToTerminal(text, className);
+                        tempDialogueIndex++;
+                    }
+                }
+
+                // 重新显示当前对话组中已完成的对话
+                if (!finished && currentItemIndex < dataList.length) {
+                    const item = dataList[currentItemIndex];
+                    if (item.type === "chat") {
+                        const dialogues = item.dialogues || [];
+                        // 只显示已完成的对话，不包括当前正在播放的
+                        for (let i = 0; i < currentDialogueIndex; i++) {
+                            const dialogue = dialogues[i];
+                            const text = currentLanguage === 'zh' ? dialogue.zh : dialogue.en;
+                            const className = currentLanguage === 'zh' ? "chinese-text" : "english-text";
+                            printToTerminal(text, className);
+                        }
+                        // 重新开始当前正在播放的对话
+                        if (currentDialogueIndex < dialogues.length) {
+                            const dialogue = dialogues[currentDialogueIndex];
+                            const text = currentLanguage === 'zh' ? dialogue.zh : dialogue.en;
+                            const className = currentLanguage === 'zh' ? "chinese-text" : "english-text";
+                            startTyping(text, className);
+                        } else {
+                            // 如果当前对话组已完成，继续下一句
+                            setTimeout(() => {
+                                nextSentence();
+                            }, 500);
+                        }
+                    } else if (item.type === "plot") {
+                        startTyping(item.plot, "plot-text");
+                    }
+                }
+            }
+
+            // 按钮事件
+            document.getElementById("nextBtn").onclick = function () {
+                if (finished) return;
+                if (isTyping) {
+                    finishCurrentTyping();
+                } else {
+                    nextSentence();
+                }
+            };
+            document.getElementById("speedUpBtn").onclick = function () {
+                if (typingSpeed > 10) typingSpeed = Math.max(typingSpeed - 30, 5);
+            };
+            document.getElementById("speedDownBtn").onclick = function () {
+                typingSpeed = Math.max(typingSpeed + 30, 100);
+            };
+
+            // 一键输出所有文本
+            document.getElementById("outputAllBtn").onclick = function () {
+                if (finished) return;
+                if (typingInterval) clearTimeout(typingInterval);
+                isTyping = false;
+
+                // 使用setTimeout避免阻塞UI
+                function outputAllContent() {
+                    if (finished) return;
+
+                    if (currentItemIndex >= dataList.length) {
+                        finished = true;
+                        printToTerminal("--- 播放完毕 ---");
+                        setTimeout(() => {
+                            showAsciiArt();
+                        }, 1000);
+                        document.getElementById("nextBtn").disabled = true;
+                        document.getElementById("speedUpBtn").disabled = true;
+                        document.getElementById("speedDownBtn").disabled = true;
+                        document.getElementById("outputAllBtn").disabled = true;
+                        document.getElementById("toggleLangBtn").disabled = true;
+                        return;
+                    }
+
+                    const item = dataList[currentItemIndex];
+                    if (item.type === "plot") {
+                        printToTerminal(item.plot, "plot-text");
+                        currentItemIndex++;
+                        currentDialogueIndex = 0;
+                        setTimeout(outputAllContent, 50);
+                    } else if (item.type === "chat") {
+                        const dialogues = item.dialogues || [];
+                        if (dialogues.length === 0) {
+                            currentItemIndex++;
+                            setTimeout(outputAllContent, 50);
+                            return;
+                        }
+                        if (currentDialogueIndex >= dialogues.length) {
+                            currentItemIndex++;
+                            currentDialogueIndex = 0;
+                            setTimeout(outputAllContent, 50);
+                            return;
+                        }
+                        const dialogue = dialogues[currentDialogueIndex];
+                        const text = currentLanguage === 'zh' ? dialogue.zh : dialogue.en;
+                        const className = currentLanguage === 'zh' ? "chinese-text" : "english-text";
+                        printToTerminal(text, className);
+                        currentDialogueIndex++;
+                        setTimeout(outputAllContent, 50);
+                    }
+                }
+
+                outputAllContent();
+            };
+
+            // 切换语言
+            document.getElementById("toggleLangBtn").onclick = function () {
+                currentLanguage = currentLanguage === 'zh' ? 'en' : 'zh';
+                const btn = document.getElementById("toggleLangBtn");
+                btn.textContent = currentLanguage === 'zh' ? '切换语言' : 'Switch Language';
+
+                // 如果当前正在打字，直接停止打字
+                if (isTyping) {
+                    if (typingInterval) clearTimeout(typingInterval);
+                    isTyping = false;
+                    // 移除当前打字行
+                    const currentLine = document.getElementById("current-typing-line");
+                    if (currentLine) {
+                        currentLine.remove();
+                    }
+                }
+
+                // 重新显示所有已输出的内容
+                refreshAllContent();
+            };
+
+            // 页面加载时开始
+            window.onload = startPlaying();
     </script>
 </body>
 
