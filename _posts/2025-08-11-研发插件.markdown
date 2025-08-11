@@ -1,0 +1,92 @@
+---
+layout: main
+title: 前端构建工具插件研发
+date: 2025-08-11 14:48:30 +0800
+description: 编写插件供vite、webpack项目打包使用。
+tags: [插件,plugin,大模型，GPT-5]
+---
+
+## 前言
+新来了一个需求，要求调研某工具，它们提供了多平台的插件，而我的任务就是弄清楚该工具如何在公司项目落地。  
+调研过程很简单，该工具非常有名，功能齐全，支持平台完备，只需要在本地项目中尝试运行一下即可。  
+但是呢，我们希望该工具的接入能更简单一些，让使用者不用关心某些具体实现，所以，我们准备将一些使用者在业务代码的工作挪到插件里来。  
+
+## 项目大体结构
+```
+product/
+├─ package.json                — 包配置/入口/exports/脚本
+├─ package-lock.json           — 依赖锁文件
+├─ README.md                   — 使用文档与示例
+├─ tsconfig.json               — TS 配置与路径别名
+├─ vite.config.js              — 库构建配置（多入口/类型声明）
+├─ tests/
+│  └─ utils.test.ts            — 选项合并与配置测试
+└─ src/
+   ├─ index.ts                 — 导出工具与类型（插件分入口引入）
+   ├─ configs/
+   │  ├─ index.ts              — 汇总环境配置
+   │  ├─ product.ts            — 生产环境默认配置
+   │  └─ qa.ts                 — 测试环境默认配置
+   ├─ constants/
+   │  ├─ index.ts              — 常量汇总
+   │  ├─ x.ts                  — x平台特定环境变量
+   │  └─ base.ts               — 通用环境变量
+   ├─ enums/
+   │  ├─ index.ts              — 枚举汇总
+   │  ├─ x.ts                  — x平台环境枚举
+   │  └─ base.ts               — 通用环境枚举
+   ├─ plugins/
+   │  ├─ vite/
+   │  │  ├─ index.ts           — 导出 Vite 插件与工具
+   │  │  ├─ types.ts           — Vite 插件类型定义
+   │  │  ├─ core/
+   │  │  │  ├─ plugin1.ts      — ...
+   │  │  │  ├─ plugin2.ts      — ...
+   │  │  │  ├─ plugin3.ts      — ...
+   │  │  │  ├─ plugin4.ts      — ...
+   │  │  │  └─ utils.ts        — Vite 工具
+   │  │  └─ x/
+   │  │     ├─ index.ts        — x平台预设导出
+   │  │     ├─ plugin1.ts      — ...
+   │  │     ├─ plugin2.ts      — ...
+   │  │     └─ plugin3.ts      — ...
+   │  └─ webpack/
+   │     ├─ index.ts           — 导出 Webpack 插件与工具
+   │     ├─ types.ts           — Webpack 类型定义
+   │     ├─ core/
+   │     │  ├─ plugin1.ts      — ...
+   │     │  ├─ plugin2.ts      — ...
+   │     │  ├─ plugin3.ts      — ...
+   │     │  ├─ plugin4.ts      — ...
+   │     │  └─ utils.ts        — Webpack 工具
+   │     └─ x/
+   │        ├─ index.ts        — x平台预设导出
+   │        ├─ plugin1.ts      — ...
+   │        ├─ plugin2.ts      — ...
+   │        └─ plugin3.ts      — ...
+   ├─ types/
+   │  ├─ index.ts              — 类型汇总
+   │  ├─ x.ts                  — x平台参数类型
+   │  └─ base.ts               — 通用类型（配置/参数/选项）
+   └─ utils/
+      ├─ index.ts              — 工具导出
+      ├─ function1.ts          — ...
+      ├─ function2.ts          — ...
+      └─ function3.ts          — ...
+```
+
+## 问题
+Q. 需要区分vite和webpack的插件，同时需要区分依赖的平台。项目的目录结构、api要如何设计？  
+A. 如上所示，项目结构可以参考。从代码角度看，主要是区分开vite和webpack的插件，而不同的依赖平台，则是为插件提供不同的环境变量，所以采用 plugin-》 编译平台 -》 插件核心实现 -》依赖平台实现。
+
+Q. 项目的node_modules依赖要怎么处理？    
+A. 项目中会引用一些第三方的内容，例如 vite、webpack的类型，fs、path等node自带的工具，这些包大多放在devDependencies + peerDependencies + config.rollupOptions.external中，部分功能相关的放在dependencies + config.rollupOptions.external中。  
+
+Q. webpack如何在代码解析前插入代码？    
+A. 对比vite是在transform阶段插入代码，只需读取code->拼接->生成新source map->返回即可。而在webpack，并没有这么一个钩子专门在编译前修改文件，开始使用buildModule，去修改code，但是并不能运行。随后选择在`normalModuleFactory.afterResolve`里去判断，然后动态添加loader去处理逻辑。
+
+## 体会
+1. 虽然一直用vite，但还是第一次写vite的插件。vite作为新一代的前端开发工具，插槽式的api，确实和vue2有异曲同工的简单。
+2. webpack 的插件需要apply函数，在apply里注册监听函数，格式不固定，vite的插件需要hook，但是更简洁，也更简单。
+3. webpack 的插件类型无法是数组，vite的插件类型可以是数组，vite的插件组合更方便。
+4. 现在有点理解很多第三方库的结构设计里，在npm往往是一个多包仓库，在`package/`下是每个分包。我所写的库当前的这种结构，其实也可以视为 core + webpack + vite 的组合，后面如果要改成多仓库比较简单。
