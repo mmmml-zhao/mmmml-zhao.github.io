@@ -3,7 +3,7 @@ layout: main
 title: 前端构建工具插件研发
 date: 2025-08-11 14:48:30 +0800
 description: 编写插件供vite、webpack项目打包使用。
-tags: [插件,plugin,大模型，GPT-5]
+tags: [插件,plugin,大模型,GPT-5]
 ---
 
 ## 前言
