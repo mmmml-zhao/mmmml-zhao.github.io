@@ -1,0 +1,1 @@
+import{t as e}from"./index-Cl1TJMzF.js";import"./PlusOutlined-DpKg4S2b.js";import"./WalkMap-Ek39BrBx.js";import{t}from"./Form-DS-xIzZ5.js";import"./ClockCircleOutlined-BL5jso9o.js";var n=e(),r=()=>(0,n.jsx)(t,{type:`create`});export{r as default};
