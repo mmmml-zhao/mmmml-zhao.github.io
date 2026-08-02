@@ -1,6 +1,6 @@
 ---
 layout: main
-title: Qwen3.5:9B使用小记
+title: Qwen3.5-9B使用小记
 date: 2026-03-11 11:03:30 +0800
 description: 使用Qwen3.5:9B模型
 tags: [Qwen3.5,9B,模型,AI,ollama]
